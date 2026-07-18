@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // CYBER INDEX MATRIX v5.0</title>
+    <title>X-DATA // CYBER INDEX MATRIX v5.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
@@ -50,7 +50,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.0</h1>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.1</h1>
             </div>
             <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
                 CORE MATRIX: TARGET DATA INDEXER
@@ -224,7 +224,7 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_1')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
@@ -314,8 +314,20 @@
         }
 
         function executeProductionIDParser(text) {
-            // Split incoming text by clean operational lines
+            // Split raw data lines and filter out empty items
             let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+
+            // Background security string headers shield array
+            const forbiddenMatrix = [
+                "جمهورية", "العراق", "كۆمارى", "وزارة", "الداخلية", "وهزارهتى", 
+                "المدنية", "الجوازات", "الاقامة", "بارى", "شارستاتى", "باسمؤرت"
+            ];
+
+            // Filter lines to remove noise lines containing official document background text
+            let validLines = lines.filter(line => {
+                let matchesForbidden = forbiddenMatrix.some(word => line.includes(word));
+                return !matchesForbidden;
+            });
 
             let extractedName = "";
             let extractedDad = "";
@@ -326,28 +338,27 @@
             let extractedAge = "";
             let extractedLocation = "";
 
-            // 1. Precise Serial Extraction Regex Array (Finds 12 consecutive digits)
+            // 1. Clean serial matching matrix
             let idMatch = text.match(/\b\d{12}\b/) || text.match(/\b\d{9,11}\b/);
             if (idMatch) extractedId = idMatch[0];
 
-            // 2. Fallback Row Allocator: Grabs exactly what the OCR engine reads without dropping components
-            let arabicKurdishLines = lines.filter(l => /[\u0600-\u06FF]/.test(l));
-            
-            if (arabicKurdishLines.length > 0) {
-                extractedName = arabicKurdishLines[0];
-                if (arabicKurdishLines.length > 1) extractedDad = arabicKurdishLines[1];
-                if (arabicKurdishLines.length > 2) extractedGrandpaFirst = arabicKurdishLines[2];
-                if (arabicKurdishLines.length > 3) extractedGrandpaSec = arabicKurdishLines[3];
-                if (arabicKurdishLines.length > 4) extractedMom = arabicKurdishLines[4];
-            }
+            // 2. Isolate cleanly read Arabic/Kurdish script text strings
+            let cleanDataPool = validLines.filter(l => /[\u0600-\u06FF]/.test(l));
 
-            // Clean layout prefix titles if matched
+            // Assign lines to targets securely, avoiding background title garbage
+            if (cleanDataPool.length > 0) extractedName = cleanDataPool[0];
+            if (cleanDataPool.length > 1) extractedDad = cleanDataPool[1];
+            if (cleanDataPool.length > 2) extractedGrandpaFirst = cleanDataPool[2];
+            if (cleanDataPool.length > 3) extractedGrandpaSec = cleanDataPool[3];
+            if (cleanDataPool.length > 4) extractedMom = cleanDataPool[4];
+
+            // Label text trim engine
             const cleanDebris = (str) => {
                 if (!str) return "";
-                return str.replace(/(الاسم|ناو|الأب|باوك|الأم|دایک|الجد|باپیر|اللقب|الجنس|فصيلة|تاريخ|محل|الولادة|محافظة|:\s*|:-\s*)/g, '').trim();
+                return str.replace(/(الاسم|ناو|الأب|باوك|الأم|دایک|الجد|باپیر|اللقب|الجنس|فصيلة|تاريخ|محل|الولادة|محافظة|:\s*|:-\s*|‎)/g, '').trim();
             };
 
-            // 3. True Real-Time Age Matrix Compiler
+            // 3. Dynamic Precision Age Compiler Matrix (Active Sync to 2026 Grid)
             let birthYearMatch = text.match(/\b(19\d{2}|20\d{2})\b/);
             let currentYear = new Date().getFullYear(); 
 
@@ -360,9 +371,9 @@
                 }
             }
 
-            // Parse location from bottom strings if structural positions hit fields
+            // Fallback for location fields
             for (let line of lines) {
-                if (line.includes("محل") || line.includes("شوێن")) {
+                if (line.includes("محل") || line.includes("شوێن") || line.includes("لعدايك")) {
                     extractedLocation = cleanDebris(line);
                     break;
                 }
@@ -375,7 +386,7 @@
             document.getElementById('vMom').value = cleanDebris(extractedMom) || "";
             document.getElementById('vGrandpaFirst').value = cleanDebris(extractedGrandpaFirst) || "";
             document.getElementById('vGrandpaSec').value = cleanDebris(extractedGrandpaSec) || "";
-            document.getElementById('vLocation').value = extractedLocation || "";
+            document.getElementById('vLocation').value = cleanDebris(extractedLocation) || "";
         }
 
         vaultVerificationForm.addEventListener('submit', (e) => {
@@ -401,7 +412,7 @@
             };
 
             profiles.push(newRecord);
-            localStorage.setItem('xdata_cyber_vault_v5', JSON.stringify(profiles));
+            localStorage.setItem('xdata_cyber_vault_v5_1', JSON.stringify(profiles));
             
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
@@ -523,7 +534,7 @@
         window.wipeDataNode = function(id) {
             if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault_v5', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v5_1', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
