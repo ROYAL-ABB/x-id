@@ -1,173 +1,214 @@
 <!DOCTYPE html>
-<html lang="ku">
+<html lang="ku" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // CYBER INDEXER</title>
+    <title>X-DATA // SECURE CYBER INDEXER v3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+        /* Modern, ultra-smooth Arabic/Kurdish fonts combined with Hacker monospace */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Vazirmatn:wght@400;700&display=swap');
+        
         body {
-            background-color: #030712;
+            background-color: #020617;
             font-family: 'Fira Code', monospace;
         }
+        
+        /* Smooth fallback for Kurdish Sorani text fields */
+        .ku-text {
+            font-family: 'Vazirmatn', 'Fira Code', sans-serif;
+            letter-spacing: 0px;
+        }
+
         .cyber-glow {
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
         }
-        .cyber-border {
-            border: 1px solid rgba(34, 197, 94, 0.3);
+        
+        .matrix-border {
+            border: 1px solid rgba(34, 197, 94, 0.25);
         }
-        .cyber-border:focus {
+
+        .matrix-border:focus {
             border-color: #22c55e;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
         }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #16a34a; }
+
+        .dir-rtl {
+            direction: rtl;
+        }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 2px; }
     </style>
 </head>
 <body class="text-green-400 min-h-screen flex flex-col selection:bg-green-500 selection:text-black">
 
-    <!-- Terminal Header -->
-    <header class="border-b border-green-900/60 bg-black/80 backdrop-blur-md p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+    <!-- Terminal Header System -->
+    <header class="border-b border-green-900/60 bg-black/90 backdrop-blur-md p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <span class="animate-ping inline-flex h-3 w-3 rounded-full bg-green-500 opacity-75"></span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v2.0</h1>
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v3.0 PRO</h1>
             </div>
-            <div class="text-xs font-mono bg-green-950/40 border border-green-900 px-3 py-1 text-green-500 rounded">
-                SECURE SYS // LOCALHOST_VAULT
+            <div class="text-xs tracking-mono bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
+                CORE MODE: AI INTEGRITY SCANNER
             </div>
         </div>
     </header>
 
-    <!-- Main Dynamic Application Container -->
-    <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-x-hidden">
+    <!-- Main Workspace Application Matrix -->
+    <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left Panel: Dual Side Upload Matrix & Review Console (5 Cols) -->
+        <!-- Left Section: Upload Command Deck & Real-Time Buffer (5 Cols) -->
         <section class="lg:col-span-5 flex flex-col gap-4">
             <div class="bg-black border border-green-900/60 p-5 rounded relative overflow-hidden cyber-glow">
-                <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 font-mono text-green-500">SYS_INPUT</div>
-                <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-4">// بارکردنی ناسنامە (Upload ID)</h2>
+                <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 text-green-500 font-mono">CORE_CAPTURE</div>
+                <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-4 ku-text">// بارکردنی ناسنامە (Dual-Side Capture)</h2>
                 
-                <!-- Dual Upload Zone Grid Area -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <!-- Front Side -->
-                    <div class="relative border border-dashed border-green-900/60 bg-green-950/10 rounded p-4 text-center cursor-pointer hover:bg-green-950/20 transition group">
-                        <input type="file" id="fileFront" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div id="previewFront" class="absolute inset-0 hidden bg-cover bg-center rounded"></div>
-                        <p id="labelFront" class="text-xs text-green-600 group-hover:text-green-400 pointer-events-none">+ FRONT SIDE<br><span class="text-[10px] opacity-60">رووکار</span></p>
+                <!-- Double Sided Trigger Layout Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Front Module Grid Area -->
+                    <div onclick="openCaptureModal('front')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
+                        <div id="previewFront" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
+                        <div id="contentFront" class="space-y-1">
+                            <span class="text-2xl block group-hover:scale-110 transition duration-200">🆔</span>
+                            <p class="text-xs font-bold text-green-500 uppercase tracking-wider">FRONT SIDE</p>
+                            <p class="text-[11px] text-green-700 ku-text">رووکاری پێشەوە</p>
+                        </div>
                     </div>
-                    <!-- Back Side -->
-                    <div class="relative border border-dashed border-green-900/60 bg-green-950/10 rounded p-4 text-center cursor-pointer hover:bg-green-950/20 transition group">
-                        <input type="file" id="fileBack" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div id="previewBack" class="absolute inset-0 hidden bg-cover bg-center rounded"></div>
-                        <p id="labelBack" class="text-xs text-green-600 group-hover:text-green-400 pointer-events-none">+ BACK SIDE<br><span class="text-[10px] opacity-60">پشتەوە</span></p>
+
+                    <!-- Back Module Grid Area -->
+                    <div onclick="openCaptureModal('back')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
+                        <div id="previewBack" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
+                        <div id="contentBack" class="space-y-1">
+                            <span class="text-2xl block group-hover:scale-110 transition duration-200">📝</span>
+                            <p class="text-xs font-bold text-green-500 uppercase tracking-wider">BACK SIDE</p>
+                            <p class="text-[11px] text-green-700 ku-text">پشتەوەی ناسنامە</p>
+                        </div>
                     </div>
                 </div>
 
-                <button id="scanTriggerBtn" class="w-full bg-green-600 hover:bg-green-500 text-black font-bold py-2 rounded text-xs tracking-widest transition uppercase cursor-pointer">
-                    Execute Deep Text Scan
+                <button id="scanTriggerBtn" class="w-full bg-green-500 hover:bg-green-400 text-black font-black py-3 rounded-lg text-xs tracking-widest transition uppercase cursor-pointer shadow-lg shadow-green-500/10">
+                    Execute Deep AI Schema Analysis
                 </button>
             </div>
 
-            <!-- Review and Validation Editor Terminal -->
-            <div class="bg-black border border-green-900/60 p-5 rounded flex-1 flex flex-col relative">
-                <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 font-mono text-green-500">VERIFICATION_MATRIX</div>
-                <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-3">// پشتڕاستکردنەوەی زانیارییەکان</h2>
+            <!-- Verification System Confirmation Console Area -->
+            <div class="bg-black border border-green-900/60 p-5 rounded-lg flex-1 flex flex-col relative">
+                <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 text-green-500 font-mono">AI_VERIFICATION_MATRIX</div>
+                <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-4 ku-text">// ڕێکخستنی زانیارییەکان</h2>
                 
-                <form id="vaultVerificationForm" class="space-y-3 text-xs flex-1 flex flex-col justify-between">
-                    <div class="space-y-2.5">
-                        <div class="grid grid-cols-2 gap-2">
+                <form id="vaultVerificationForm" class="space-y-3.5 text-xs flex-1 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">ژمارەی ناسنامە (ID Number)</label>
-                                <input type="text" id="vNumber" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded font-mono focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ژمارەی ناسنامە (ID Number)</label>
+                                <input type="text" id="vNumber" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 font-mono focus:outline-none matrix-border text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">تەمەن (Age)</label>
-                                <input type="text" id="vAge" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">تەمەن (Age)</label>
+                                <input type="text" id="vAge" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-[10px] uppercase text-green-600 mb-1">ناوی تەواو (Holder Name)</label>
-                            <input type="text" id="vName" required class="w-full bg-gray-950 text-white px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                            <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی تەواو (ID Holder Name)</label>
+                            <input type="text" id="vName" required class="w-full bg-slate-950 text-white font-bold px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">ناوی باوک (Father Name)</label>
-                                <input type="text" id="vDad" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باوک (Father's Name)</label>
+                                <input type="text" id="vDad" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">ناوی دایک (Mother Name)</label>
-                                <input type="text" id="vMom" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی دایک (Mother's Name)</label>
+                                <input type="text" id="vMom" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">ناوی باپیر (Grandfather)</label>
-                                <input type="text" id="vGrandpa" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باپیر (Grandfather)</label>
+                                <input type="text" id="vGrandpa" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 mb-1">ناوی داپیر (Grandmother)</label>
-                                <input type="text" id="vGrandma" class="w-full bg-gray-950 text-green-400 px-2.5 py-2 rounded focus:outline-none cyber-border text-xs">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی داپیر (Grandmother)</label>
+                                <input type="text" id="vGrandma" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-green-900/40 hover:bg-green-800 border border-green-500 text-green-400 font-bold py-2 rounded text-xs uppercase tracking-wider transition mt-4 cursor-pointer">
-                        Commit Record to Index Data
+                    <button type="submit" class="w-full bg-green-950/40 hover:bg-green-900/60 border border-green-500 text-green-400 font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition mt-4 cursor-pointer ku-text">
+                        تۆمارکردنی کۆتایی لە ناو سیستەم (Save to Index)
                     </button>
                 </form>
 
-                <!-- Processing Spinner Overlay Panel -->
-                <div id="scannerOverlay" class="absolute inset-0 bg-black/95 hidden flex-col justify-center items-center p-6 text-center z-30">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mb-3"></div>
-                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Neural OCR Array...</p>
-                    <p id="scanProgress" class="text-[10px] text-green-600 mt-1">Status: Initializing Core</p>
+                <!-- Processing Network HUD Diagnostic Array View Overlay -->
+                <div id="scannerOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col justify-center items-center p-6 text-center z-30">
+                    <div class="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin mb-4"></div>
+                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Neural Data Parsing Array Active...</p>
+                    <p id="scanProgress" class="text-[11px] text-green-600 font-mono mt-1">Matrix Initialization Stage</p>
                 </div>
             </div>
         </section>
 
-        <!-- Center Panel: Live A-Z Node Feed Explorer (3 Cols) -->
-        <section class="lg:col-span-3 bg-black border border-green-900/60 rounded flex flex-col h-[65vh] lg:h-auto overflow-hidden relative">
-            <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 font-mono text-green-500">INDEX_DIRECTORY</div>
+        <!-- Center Section: Active Core Index Grid Directory Node View (3 Cols) -->
+        <section class="lg:col-span-3 bg-black border border-green-900/60 rounded-lg flex flex-col h-[65vh] lg:h-auto overflow-hidden relative">
+            <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 text-green-500 font-mono">VAULT_INDEX</div>
             <div class="p-4 border-b border-green-900/60 flex justify-between items-center bg-green-950/20">
-                <h2 class="text-xs font-bold tracking-wider text-white uppercase">// INDEX LIST</h2>
-                <span id="indexCount" class="text-xs text-green-500 font-mono">[0]</span>
+                <h2 class="text-xs font-bold tracking-wider text-white uppercase font-mono">// TARGETS</h2>
+                <span id="indexCount" class="text-xs text-green-400 font-mono font-bold">[0]</span>
             </div>
             
-            <div class="p-2 border-b border-green-900/40">
-                <input type="text" id="searchBar" class="w-full bg-gray-950 border border-green-900/60 rounded px-2.5 py-1.5 text-xs text-green-400 focus:outline-none focus:border-green-500 transition" placeholder="🔍 ناوی تۆمارکراو بگەرێ...">
+            <div class="p-3 border-b border-green-900/40">
+                <input type="text" id="searchBar" class="w-full bg-slate-950 border border-green-900/60 rounded-lg px-3 py-2 text-xs text-green-400 focus:outline-none focus:border-green-500 transition ku-text" placeholder="🔍 بگەڕێ بۆ ناوی تۆمارکراو...">
             </div>
 
-            <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-3">
-                <!-- A-Z Directory blocks output here -->
+            <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-2">
+                <!-- Sorted Directory Log Node Blocks print here -->
             </div>
         </section>
 
-        <!-- Right Panel: Deep-Data Inspector View Frame (4 Cols) -->
-        <section id="inspectorPanel" class="lg:col-span-4 bg-black border border-green-900/60 rounded flex flex-col p-5 relative justify-center items-center text-green-700 font-mono text-center">
+        <!-- Right Section: Interactive Decoded Sorani Inspector Core Profile Module (4 Cols) -->
+        <section id="inspectorPanel" class="lg:col-span-4 bg-black border border-green-900/60 rounded-lg flex flex-col p-5 relative justify-center items-center text-green-700 font-mono text-center cyber-glow">
             <div>
-                <p class="text-xs uppercase tracking-widest">// SECURE INSPECT MODULE</p>
-                <p class="text-[10px] text-green-800 mt-1">Select an active system index node to read decoded profile schemas.</p>
+                <p class="text-xs uppercase tracking-widest font-bold">// INSPECTION CONSOLE ACTIVE</p>
+                <p class="text-[11px] text-green-800 mt-2 ku-text">یەکێک لە زانیارییە تۆمارکراوەکان هەڵبژێرە بۆ پیشاندانی تەواوی داتاکان بە کوردی</p>
             </div>
         </section>
 
     </main>
 
+    <!-- Source Selection Modal UI -->
+    <div id="sourceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden justify-center items-center p-4 z-50 animate-fade-in">
+        <div class="bg-slate-950 border-2 border-green-500 p-6 rounded-xl max-w-xs w-full relative cyber-glow">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-white text-center mb-4 font-mono">// SELECT ARREST CHANNEL</h3>
+            <div class="space-y-3">
+                <button onclick="triggerSourceAction('camera')" class="w-full bg-green-600 hover:bg-green-500 text-black font-bold py-2.5 rounded text-xs uppercase tracking-wider font-mono cursor-pointer">
+                    📷 OPEN LIVE CAMERA
+                </button>
+                <button onclick="triggerSourceAction('gallery')" class="w-full bg-green-950/80 border border-green-500 hover:bg-green-900 text-green-400 font-bold py-2.5 rounded text-xs uppercase tracking-wider font-mono cursor-pointer">
+                    📁 BROWSE FILE FILES
+                </button>
+            </div>
+            <button onclick="closeCaptureModal()" class="w-full mt-4 text-[10px] text-red-500 hover:text-red-400 font-mono tracking-widest uppercase">
+                [ CANCEL TERMINAL ]
+            </button>
+        </div>
+    </div>
+
+    <!-- Hidden native routing fields -->
+    <input type="file" id="nativeCameraInput" accept="image/*" capture="environment" class="hidden">
+    <input type="file" id="nativeGalleryInput" accept="image/*" class="hidden">
+
     <script>
-        const fileFront = document.getElementById('fileFront');
-        const fileBack = document.getElementById('fileBack');
-        const previewFront = document.getElementById('previewFront');
-        const previewBack = document.getElementById('previewBack');
-        const labelFront = document.getElementById('labelFront');
-        const labelBack = document.getElementById('labelBack');
+        // DOM Handles Setup
         const scanTriggerBtn = document.getElementById('scanTriggerBtn');
-        
         const scannerOverlay = document.getElementById('scannerOverlay');
         const scanProgress = document.getElementById('scanProgress');
         const vaultVerificationForm = document.getElementById('vaultVerificationForm');
@@ -175,249 +216,302 @@
         const azListContainer = document.getElementById('azListContainer');
         const indexCount = document.getElementById('indexCount');
         const inspectorPanel = document.getElementById('inspectorPanel');
+        const sourceModal = document.getElementById('sourceModal');
+        
+        const nativeCameraInput = document.getElementById('nativeCameraInput');
+        const nativeGalleryInput = document.getElementById('nativeGalleryInput');
+        const previewFront = document.getElementById('previewFront');
+        const previewBack = document.getElementById('previewBack');
+        const contentFront = document.getElementById('contentFront');
+        const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v3')) || [];
         let selectedProfileId = null;
+        let activeTargetSide = null;
         let activeFrontBase64 = null;
         let activeBackBase64 = null;
 
-        // Image Selection Display Previews
-        fileFront.addEventListener('change', (e) => handleImageSelection(e, previewFront, labelFront, b64 => activeFrontBase64 = b64));
-        fileBack.addEventListener('change', (e) => handleImageSelection(e, previewBack, labelBack, b64 => activeBackBase64 = b64));
+        // Modal Action Logic Router Engine
+        function openCaptureModal(side) {
+            activeTargetSide = side;
+            sourceModal.classList.remove('hidden');
+            sourceModal.classList.add('flex');
+        }
 
-        function handleImageSelection(e, previewElem, labelElem, callback) {
+        function closeCaptureModal() {
+            sourceModal.classList.add('hidden');
+            sourceModal.classList.remove('flex');
+        }
+
+        function triggerSourceAction(sourceType) {
+            closeCaptureModal();
+            if (sourceType === 'camera') {
+                nativeCameraInput.click();
+            } else {
+                nativeGalleryInput.click();
+            }
+        }
+
+        // Processing Input Pipeline Event Bindings
+        nativeCameraInput.addEventListener('change', (e) => processIncomingAsset(e));
+        nativeGalleryInput.addEventListener('change', (e) => processIncomingAsset(e));
+
+        function processIncomingAsset(e) {
             if (e.target.files.length === 0) return;
             const file = e.target.files[0];
             const reader = new FileReader();
+            
             reader.onloadend = () => {
-                previewElem.style.backgroundImage = `url(${reader.result})`;
-                previewElem.classList.remove('hidden');
-                labelElem.classList.add('opacity-0');
-                callback(reader.result);
+                const targetPreview = activeTargetSide === 'front' ? previewFront : previewBack;
+                const targetContent = activeTargetSide === 'front' ? contentFront : contentBack;
+                
+                targetPreview.style.backgroundImage = `url(${reader.result})`;
+                targetPreview.classList.remove('hidden');
+                targetContent.classList.add('opacity-0');
+                
+                if (activeTargetSide === 'front') {
+                    activeFrontBase64 = reader.result;
+                } else {
+                    activeBackBase64 = reader.result;
+                }
             };
             reader.readAsDataURL(file);
+            // Reset fields for identical snap tracking calls
+            e.target.value = "";
         }
 
-        // Processing Pipeline Trigger
+        // Advanced AI Structural Parser Pipeline Engine Block
         scanTriggerBtn.addEventListener('click', async () => {
-            if(!activeFrontBase64 && !activeBackBase64) {
-                alert("Please drop or snap at least one image frame side first.");
+            if (!activeFrontBase64 && !activeBackBase64) {
+                alert("Terminal Warning: Please connect or capture at least one layout vector first.");
                 return;
             }
 
             scannerOverlay.classList.remove('hidden');
-            let comprehensiveTextLog = "";
+            let collectedDataDump = "";
 
             try {
-                if(activeFrontBase64) {
-                    scanProgress.textContent = "Scanning Front Face Array...";
-                    const res = await Tesseract.recognize(activeFrontBase64, 'eng', { logger: m => trackScannerProgress(m, 'Front') });
-                    comprehensiveTextLog += res.data.text + "\n";
+                if (activeFrontBase64) {
+                    scanProgress.textContent = "DECODING FRONT ID MATRIX...";
+                    const res = await Tesseract.recognize(activeFrontBase64, 'eng', { logger: m => syncProgressTracker(m, 'Front Matrix') });
+                    collectedDataDump += res.data.text + "\n";
                 }
-                if(activeBackBase64) {
-                    scanProgress.textContent = "Scanning Reverse Grid...";
-                    const res = await Tesseract.recognize(activeBackBase64, 'eng', { logger: m => trackScannerProgress(m, 'Back') });
-                    comprehensiveTextLog += res.data.text + "\n";
+                if (activeBackBase64) {
+                    scanProgress.textContent = "PARSING REVERSE DATA GRID...";
+                    const res = await Tesseract.recognize(activeBackBase64, 'eng', { logger: m => syncProgressTracker(m, 'Reverse Index') });
+                    collectedDataDump += res.data.text + "\n";
                 }
                 
-                populateVerificationForm(comprehensiveTextLog);
-            } catch(e) {
-                console.error(e);
-                alert("Direct text acquisition anomaly. Entering manual fallback parsing entry.");
-                populateVerificationForm("");
+                executeAIExtractionParser(collectedDataDump);
+            } catch (err) {
+                console.error(err);
+                alert("OCR Data Readout anomaly. Initializing structural validation manual fallback node.");
+                executeAIExtractionParser("");
             } finally {
                 scannerOverlay.classList.add('hidden');
             }
         });
 
-        function trackScannerProgress(m, surface) {
-            if(m.status === 'recognizing') {
-                scanProgress.textContent = `${surface}: ${Math.floor(m.progress * 100)}%`;
+        function syncProgressTracker(m, segment) {
+            if (m.status === 'recognizing') {
+                scanProgress.textContent = `${segment}: ${Math.floor(m.progress * 100)}%`;
             }
         }
 
-        // Automatic Field Mapping Engine
-        function populateVerificationForm(rawText) {
-            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+        // Hyper-Extraction Layout Mapping Formula Engine
+        function executeAIExtractionParser(text) {
+            const rawLines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
             
-            let idNum = "UNKNOWN";
-            let ageVal = "UNKNOWN";
-            let nameVal = "NEW RECORD PROXY";
+            let finalNumber = "UNKNOWN_NODE";
+            let finalAge = "UNKNOWN";
+            let finalName = "NEW RECORD SCHED";
 
-            const cleanedLines = lines.filter(l => !/identity|card|republic|passport|driver|license|national/i.test(l));
-            if(cleanedLines.length > 0) nameVal = cleanedLines[0];
+            // Clean noise lines to extract target holder name token
+            const filteredLines = rawLines.filter(l => !/identity|card|republic|iraq|kurdistan|national|passport|pasiport|id/i.test(l));
+            if (filteredLines.length > 0) finalName = filteredLines[0];
 
-            const numberMatch = rawText.match(/\b\d{9,12}\b/) || rawText.match(/(?:no|num|id)[:\s]*([A-Z0-9\-]{6,15})/i);
-            if(numberMatch) idNum = numberMatch[1] || numberMatch[0];
+            // Deep-Scanning ID Serial Regex arrays
+            const matchSerial = text.match(/\b\d{9,12}\b/) || text.match(/(?:no|num|id|ser)[:\s]*([A-Z0-9\-]{6,16})/i);
+            if (matchSerial) finalNumber = matchSerial[1] || matchSerial[0];
 
-            const ageMatch = rawText.match(/(?:age|dob|born)[:\s]*([\d]{2})/i) || rawText.match(/\b([\d]{2})\b/);
-            if(ageMatch) ageVal = ageMatch[1];
+            // Track down possible age brackets
+            const matchAge = text.match(/(?:age|birth|تەمەن)[:\s]*(\d{2})\b/) || text.match(/\b(19\d{2}|20\d{2})\b/);
+            if (matchAge) {
+                if (matchAge[1].length === 4) {
+                    finalAge = new Date().getFullYear() - parseInt(matchAge[1]);
+                } else {
+                    finalAge = matchAge[1];
+                }
+            }
 
-            document.getElementById('vNumber').value = idNum;
-            document.getElementById('vAge').value = ageVal;
-            document.getElementById('vName').value = nameVal;
+            // Fill validation form matrix variables for rapid editing review 
+            document.getElementById('vNumber').value = finalNumber;
+            document.getElementById('vAge').value = finalAge;
+            document.getElementById('vName').value = finalName;
             
-            // Clear sub-generation links for user direct verification mapping
+            // Empty lineage matrices for clean local Sorani population mappings
             document.getElementById('vDad').value = "";
             document.getElementById('vMom').value = "";
             document.getElementById('vGrandpa').value = "";
             document.getElementById('vGrandma').value = "";
         }
 
-        // Final Submission Handler Block
+        // Final local DB state validation execution module
         vaultVerificationForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const profile = {
+            const newRecord = {
                 id: Date.now(),
                 name: document.getElementById('vName').value.trim(),
                 idNumber: document.getElementById('vNumber').value.trim(),
                 age: document.getElementById('vAge').value.trim(),
-                dad: document.getElementById('vDad').value.trim() || 'دەستنیشان نەکراوە',
-                mom: document.getElementById('vMom').value.trim() || 'دەستنیشان نەکراوە',
-                grandpa: document.getElementById('vGrandpa').value.trim() || 'دەستنیشان نەکراوە',
-                grandma: document.getElementById('vGrandma').value.trim() || 'دەستنیشان نەکراوە',
+                dad: document.getElementById('vDad').value.trim() || 'دیاری نەکراوە',
+                mom: document.getElementById('vMom').value.trim() || 'دیاری نەکراوە',
+                grandpa: document.getElementById('vGrandpa').value.trim() || 'دیاری نەکراوە',
+                grandma: document.getElementById('vGrandma').value.trim() || 'دیاری نەکراوە',
                 frontImg: activeFrontBase64,
-                backImg: activeBackBase64,
-                dateAdded: new Date().toLocaleDateString()
+                backImg: activeBackBase64
             };
 
-            profiles.push(profile);
-            localStorage.setItem('xdata_cyber_vault', JSON.stringify(profiles));
+            profiles.push(newRecord);
+            localStorage.setItem('xdata_cyber_vault_v3', JSON.stringify(profiles));
             
-            // Clear parameters
+            // Clear layout metrics
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
             previewBack.classList.add('hidden');
-            labelFront.classList.remove('opacity-0');
-            labelBack.classList.remove('opacity-0');
+            contentFront.classList.remove('opacity-0');
+            contentBack.classList.remove('opacity-0');
             activeFrontBase64 = null;
             activeBackBase64 = null;
 
-            renderIndex();
-            selectProfile(profile.id);
+            renderIndexDirectory();
+            selectActiveNodeProfile(newRecord.id);
         });
 
-        // Sorted Render Directory Module Engine
-        function renderIndex(filterText = '') {
+        // Alphabetical Sorting Directory System Engine
+        function renderIndexDirectory(searchQuery = '') {
             azListContainer.innerHTML = '';
-            const query = filterText.toLowerCase();
+            const query = searchQuery.toLowerCase().trim();
 
-            const filtered = profiles.filter(p => 
+            const filteredNodes = profiles.filter(p => 
                 p.name.toLowerCase().includes(query) || 
                 p.idNumber.toLowerCase().includes(query)
             );
 
-            indexCount.textContent = `[${filtered.length}]`;
+            indexCount.textContent = `[${filteredNodes.length}]`;
 
-            if(filtered.length === 0) {
-                azListContainer.innerHTML = `<div class="text-center text-xs text-green-900 pt-6">NO ACTIVE LOG NODES</div>`;
+            if (filteredNodes.length === 0) {
+                azListContainer.innerHTML = `<div class="text-center text-xs text-green-900 pt-8 font-mono">NO ACTIVE DATA LAYOUT NODES</div>`;
                 return;
             }
 
-            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            // High Precision Sorting Module Alpha Map
+            filteredNodes.sort((a, b) => a.name.localeCompare(b.name));
 
-            filtered.forEach(profile => {
+            filteredNodes.forEach(node => {
                 const item = document.createElement('div');
-                const isSelected = profile.id === selectedProfileId;
+                const isSelected = node.id === selectedProfileId;
                 
-                item.className = `w-full border p-2 rounded flex items-center gap-3 transition cursor-pointer ${isSelected ? 'bg-green-500 text-black border-white' : 'bg-green-950/10 hover:bg-green-950/30 border-green-900/60'}`;
+                item.className = `w-full border p-2.5 rounded-xl flex items-center gap-3 transition duration-150 cursor-pointer ${isSelected ? 'bg-green-500 text-black border-white cyber-glow font-bold' : 'bg-green-950/10 hover:bg-green-950/30 border-green-900/40'}`;
                 
-                // Card Display Image Element (Defaults to front, fallbacks to back asset display frame)
-                const imgSource = profile.frontImg || profile.backImg || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2316a34a"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>';
+                // Real-time Photo crop extraction placement element 
+                const imageExtractSrc = node.frontImg || node.backImg || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2316a34a"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>';
 
                 item.innerHTML = `
-                    <div class="w-10 h-10 rounded border border-green-900/40 bg-black overflow-hidden flex-shrink-0 bg-cover bg-center" style="background-image: url('${imgSource}')"></div>
-                    <div class="flex-1 min-w-0 text-xs font-bold font-mono">
-                        <p class="truncate uppercase tracking-wide">${profile.name}</p>
-                        <p class="text-[10px] opacity-70 font-normal mt-0.5">ID: ${profile.idNumber}</p>
+                    <div class="w-11 h-11 rounded-lg border border-green-900/60 bg-slate-950 overflow-hidden flex-shrink-0 bg-cover bg-center" style="background-image: url('${imageExtractSrc}')"></div>
+                    <div class="flex-1 min-w-0 text-xs">
+                        <p class="truncate uppercase font-bold tracking-wide ku-text">${node.name}</p>
+                        <p class="text-[10px] opacity-70 font-mono mt-0.5">ID: ${node.idNumber}</p>
                     </div>
                 `;
-                item.onclick = () => selectProfile(profile.id);
+                item.onclick = () => selectActiveNodeProfile(node.id);
                 azListContainer.appendChild(item);
             });
         }
 
-        // Full Detailed Kurdish Sorani Layout Inspector View Block
-        function selectProfile(id) {
+        // Complete Smooth Kurdish Sorani Inspector Real-Time Profile Block View
+        function selectActiveNodeProfile(id) {
             selectedProfileId = id;
-            const profile = profiles.find(p => p.id === id);
-            renderIndex(searchBar.value);
+            const currentRecord = profiles.find(p => p.id === id);
+            renderIndexDirectory(searchBar.value);
 
-            if(!profile) {
-                inspectorPanel.innerHTML = `<div><p class="text-xs">// LOG TARGET DESTROYED</p></div>`;
+            if (!currentRecord) {
+                inspectorPanel.innerHTML = `<div><p class="text-xs">// CORRUPTED NODE VECTOR TARGET</p></div>`;
                 return;
             }
 
-            inspectorPanel.className = "lg:col-span-4 bg-black border border-green-500 rounded flex flex-col p-5 overflow-y-auto text-right dir-rtl";
+            inspectorPanel.className = "lg:col-span-4 bg-slate-950/60 border-2 border-green-500 rounded-xl flex flex-col p-5 overflow-y-auto text-right dir-rtl cyber-glow";
             inspectorPanel.innerHTML = `
-                <div class="flex justify-between items-start border-b border-green-900 pb-3 mb-4 text-left">
-                    <button onclick="deleteProfile(${profile.id})" class="text-[10px] bg-red-950 text-red-400 border border-red-900 px-2 py-1 rounded hover:bg-red-900 hover:text-white transition cursor-pointer">WIPE NODE</button>
+                <div class="flex justify-between items-start border-b border-green-900/60 pb-3 mb-4 text-left dir-ltr">
+                    <button onclick="wipeDataNode(${currentRecord.id})" class="text-[10px] bg-red-950/80 text-red-400 border border-red-900 px-2.5 py-1.5 rounded hover:bg-red-600 hover:text-white font-bold transition font-mono cursor-pointer">WIPE NODE</button>
                     <div class="text-right">
-                        <h2 class="text-base font-black text-white tracking-wide truncate">${profile.name}</h2>
-                        <p class="text-[9px] text-green-600 font-mono mt-0.5">SYS_REF: ${profile.id}</p>
+                        <h2 class="text-base font-black text-white tracking-wide truncate ku-text">${currentRecord.name}</h2>
+                        <p class="text-[9px] text-green-600 font-mono mt-0.5">VAULT_REF: ${currentRecord.id}</p>
                     </div>
                 </div>
 
-                <div class="space-y-4 text-xs font-mono">
-                    <!-- Kurdish Core Readout Data Fields -->
-                    <div class="bg-green-950/10 border border-green-900/60 p-3 rounded space-y-2">
-                        <div class="flex justify-between items-center py-0.5 border-b border-green-950">
-                            <span class="text-white">${profile.idNumber}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:ژمارەی ناسنامە</span>
+                <!-- Deep Decoded Profile Grid Area -->
+                <div class="space-y-4 text-sm font-mono">
+                    <div class="bg-black/40 border border-green-900/40 p-4 rounded-xl space-y-3 shadow-inner">
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold tracking-wide">${currentRecord.idNumber}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ژمارەی ناسنامە</span>
                         </div>
-                        <div class="flex justify-between items-center py-0.5 border-b border-green-950">
-                            <span class="text-white">${profile.age}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:تەمەن</span>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold">${currentRecord.age}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:تەمەن</span>
                         </div>
-                        <div class="flex justify-between items-center py-0.5 border-b border-green-950">
-                            <span class="text-white">${profile.dad}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:ناوی باوک</span>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.dad}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باوک</span>
                         </div>
-                        <div class="flex justify-between items-center py-0.5 border-b border-green-950">
-                            <span class="text-white">${profile.mom}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:ناوی دایک</span>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.mom}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی دایک</span>
                         </div>
-                        <div class="flex justify-between items-center py-0.5 border-b border-green-950">
-                            <span class="text-white">${profile.grandpa}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:ناوی باپیر</span>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.grandpa}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باپیر</span>
                         </div>
-                        <div class="flex justify-between items-center py-0.5">
-                            <span class="text-white">${profile.grandma}</span>
-                            <span class="text-green-600 text-[10px] font-bold">:ناوی داپیر</span>
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-white font-bold ku-text">${currentRecord.grandma}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی داپیر</span>
                         </div>
                     </div>
 
-                    <!-- Dual Asset Display Modules -->
-                    <div class="space-y-2">
-                        <p class="text-[9px] text-green-600 tracking-wider text-left uppercase">// DECODED BINARY IMAGES</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            ${profile.frontImg ? `<div class="border border-green-900 rounded overflow-hidden aspect-[4/3] bg-black"><img src="${profile.frontImg}" class="w-full h-full object-cover"></div>` : ''}
-                            ${profile.backImg ? `<div class="border border-green-900 rounded overflow-hidden aspect-[4/3] bg-black"><img src="${profile.backImg}" class="w-full h-full object-cover"></div>` : ''}
+                    <!-- Dual Asset Display System -->
+                    <div class="space-y-2 text-left dir-ltr">
+                        <p class="text-[9px] text-green-600 font-bold tracking-widest uppercase font-mono">// RAW EXTRACTED BINARY ASSETS</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            ${currentRecord.frontImg ? `<div class="border border-green-900/60 rounded-lg overflow-hidden aspect-[4/3] bg-black"><img src="${currentRecord.frontImg}" class="w-full h-full object-cover"></div>` : ''}
+                            ${currentRecord.backImg ? `<div class="border border-green-900/60 rounded-lg overflow-hidden aspect-[4/3] bg-black"><img src="${currentRecord.backImg}" class="w-full h-full object-cover"></div>` : ''}
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        window.deleteProfile = function(id) {
-            if(confirm("Erase this network profile record permanently?")) {
+        window.wipeDataNode = function(id) {
+            if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v3', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
-                        <p class="text-xs uppercase tracking-widest">// SECURE INSPECT MODULE</p>
-                        <p class="text-[10px] text-green-800 mt-1">Select an active system index node to read decoded profile schemas.</p>
+                        <p class="text-xs uppercase tracking-widest font-bold">// INSPECTION CONSOLE ACTIVE</p>
+                        <p class="text-[11px] text-green-800 mt-2 ku-text">یەکێک لە زانیارییە تۆمارکراوەکان هەڵبژێرە بۆ پیشاندانی تەواوی داتاکان بە کوردی</p>
                     </div>
                 `;
-                inspectorPanel.className = "lg:col-span-4 bg-black border border-green-900/60 rounded flex flex-col p-5 relative justify-center items-center text-green-700 font-mono text-center";
-                renderIndex();
+                inspectorPanel.className = "lg:col-span-4 bg-black border border-green-900/60 rounded-lg flex flex-col p-5 relative justify-center items-center text-green-700 font-mono text-center";
+                renderIndexDirectory();
             }
         }
 
-        searchBar.addEventListener('input', (e) => renderIndex(e.target.value));
-        renderIndex();
+        searchBar.addEventListener('input', (e) => renderIndexDirectory(e.target.value));
+        
+        // Boot Initializer Sequence
+        renderIndexDirectory();
     </script>
 </body>
 </html>
