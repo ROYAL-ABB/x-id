@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-Data // Relational Vault</title>
+    <title>X-Data // AI Auto-Vault</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tesseract.js for browser-based AI OCR extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <style>
         body { background-color: #0b0f19; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
     </style>
 </head>
 <body class="text-gray-100 font-sans min-h-screen flex flex-col">
@@ -19,227 +20,222 @@
     <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-black tracking-wider text-cyan-400">X-<span class="text-white">DATA</span></h1>
-            <span class="text-xs bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">A-Z Extended Directory</span>
+            <span class="text-xs bg-cyan-950 text-cyan-400 px-3 py-1 rounded-full border border-cyan-800/50 font-mono animate-pulse">AI Auto-Scanner Active</span>
         </div>
     </header>
 
     <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-80px)] overflow-hidden">
         
-        <!-- Left Panel: Form & Search (4 Cols) -->
-        <section class="lg:col-span-4 flex flex-col gap-4 h-full overflow-y-auto pr-1">
+        <!-- Left Panel: Dropzone & Status (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-4 h-full">
             
-            <!-- Search Widget -->
+            <!-- Quick Search -->
             <div class="bg-gray-950 p-4 rounded-xl border border-gray-850 shadow-md">
-                <input type="text" id="searchBar" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition" placeholder="🔍 Search profiles instantly...">
+                <input type="text" id="searchBar" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition" placeholder="🔍 Search scanned files...">
             </div>
 
-            <!-- Profile Creation Form -->
-            <div class="bg-gray-950 p-5 rounded-xl border border-gray-850 shadow-xl">
-                <h2 class="text-lg font-bold mb-3 text-white">Create New Profile</h2>
-                <form id="vaultForm" class="space-y-3 text-sm">
+            <!-- Smart Upload Box -->
+            <div class="bg-gray-950 p-6 rounded-xl border border-gray-850 flex-1 flex flex-col justify-center items-center relative text-center">
+                <input type="file" id="autoFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-20">
+                
+                <div id="dropzoneContent" class="space-y-4 pointer-events-none">
+                    <div class="w-16 h-16 bg-cyan-950/40 text-cyan-400 border border-cyan-800/30 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
+                        ↑
+                    </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">Full Name</label>
-                        <input type="text" id="pName" required class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 text-white focus:outline-none focus:border-cyan-500 transition" placeholder="Primary Name">
+                        <p class="text-base font-bold text-white">Upload ID Document</p>
+                        <p class="text-xs text-gray-400 mt-1">Drag and drop or click to scan image</p>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Father's Name</label>
-                            <input type="text" id="pDad" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Mother's Name</label>
-                            <input type="text" id="pMom" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                    </div>
+                    <p class="text-[11px] text-gray-550 border-t border-gray-900 pt-3 italic">System automatically reads text & builds profile layout.</p>
+                </div>
 
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Grandfather's Name</label>
-                            <input type="text" id="pGrandpa" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Grandmother's Name</label>
-                            <input type="text" id="pGrandma" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Age / YOB</label>
-                            <input type="text" id="pAge" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="e.g. 28">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Phone Number</label>
-                            <input type="tel" id="pPhone" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="+1...">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">Location / Address</label>
-                        <input type="text" id="pLocation" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="City, Country">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">ID Card / Document Attachment</label>
-                        <div class="relative border border-dashed border-gray-800 rounded bg-gray-900 py-3 text-center cursor-pointer hover:border-cyan-500 transition">
-                            <input type="file" id="pFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
-                            <p id="fileLabel" class="text-xs text-gray-400">Attach Document Image</p>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-950 font-bold py-2 rounded transition shadow-lg mt-2">
-                        Save Profile
-                    </button>
-                </form>
+                <!-- Processing Spinner Overlay -->
+                <div id="scannerOverlay" class="absolute inset-0 bg-gray-950/90 hidden flex-col justify-center items-center p-6 rounded-xl z-30 animate-fade-in">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cyan-400 mb-4"></div>
+                    <p class="text-sm font-bold text-cyan-400 tracking-wide uppercase font-mono">Scanning Document Structure...</p>
+                    <p id="scanProgress" class="text-xs text-gray-400 mt-1">Initializing AI core engine...</p>
+                </div>
             </div>
         </section>
 
-        <!-- Center Panel: A-Z Directory List (3 Cols) -->
+        <!-- Center Panel: Alphabetical List Index (3 Cols) -->
         <section class="lg:col-span-3 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-hidden">
             <div class="p-4 border-b border-gray-900 flex justify-between items-center bg-gray-900/20">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">A-Z Index</h2>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">Scanned Records</h2>
                 <span id="indexCount" class="text-xs text-cyan-400 font-mono">0 Loaded</span>
             </div>
-            
             <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-4">
-                <!-- A-Z Alphabetical Blocks Render Here -->
+                <!-- A-Z Auto Records go here -->
             </div>
         </section>
 
-        <!-- Right Panel: Expanded Information Inspector (5 Cols) -->
+        <!-- Right Panel: Auto-Generated Deep Data Sheet (5 Cols) -->
         <section id="inspectorPanel" class="lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-y-auto p-6 relative justify-center items-center text-gray-500">
             <div class="text-center">
-                <p class="text-lg">📂 No Profile Selected</p>
-                <p class="text-xs text-gray-600 mt-1">Select a name from the A-Z directory index to inspect details.</p>
+                <p class="text-lg">📂 Digital Profile Engine</p>
+                <p class="text-xs text-gray-600 mt-1">Upload an image file to trigger scanning operations.</p>
             </div>
         </section>
 
     </main>
 
     <script>
-        const vaultForm = document.getElementById('vaultForm');
-        const pFile = document.getElementById('pFile');
-        const fileLabel = document.getElementById('fileLabel');
+        const autoFile = document.getElementById('autoFile');
+        const scannerOverlay = document.getElementById('scannerOverlay');
+        const scanProgress = document.getElementById('scanProgress');
         const searchBar = document.getElementById('searchBar');
         const azListContainer = document.getElementById('azListContainer');
         const indexCount = document.getElementById('indexCount');
         const inspectorPanel = document.getElementById('inspectorPanel');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_profiles')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_auto_profiles')) || [];
         let selectedProfileId = null;
 
-        // Visual feedback for file attachment
-        pFile.addEventListener('change', (e) => {
-            if(e.target.files.length > 0) {
-                fileLabel.textContent = e.target.files[0].name;
-                fileLabel.className = "text-xs text-cyan-400 font-semibold truncate px-2";
-            }
+        // Image Selection Handler -> Instantly Triggers Processing Pipeline
+        autoFile.addEventListener('change', (e) => {
+            if (e.target.files.length === 0) return;
+            
+            const file = e.target.files[0];
+            scannerOverlay.classList.remove('hidden');
+            
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                processDocumentImage(reader.result);
+            };
+            reader.readAsDataURL(file);
         });
 
-        // Add Profile Event
-        vaultForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const file = pFile.files[0];
+        // OCR Parsing Core
+        function processDocumentImage(base64Image) {
+            scanProgress.textContent = "Reading textual datasets (OCR)...";
             
-            const saveData = (imgData = null) => {
-                const profile = {
-                    id: Date.now(),
-                    name: document.getElementById('pName').value.trim(),
-                    dad: document.getElementById('pDad').value.trim() || 'Not Provided',
-                    mom: document.getElementById('pMom').value.trim() || 'Not Provided',
-                    grandpa: document.getElementById('pGrandpa').value.trim() || 'Not Provided',
-                    grandma: document.getElementById('pGrandma').value.trim() || 'Not Provided',
-                    age: document.getElementById('pAge').value.trim() || 'Unknown',
-                    phone: document.getElementById('pPhone').value.trim() || 'No Contact',
-                    location: document.getElementById('pLocation').value.trim() || 'Unknown Address',
-                    image: imgData,
-                    timestamp: new Date().toLocaleDateString()
-                };
-                
-                profiles.push(profile);
-                localStorage.setItem('xdata_profiles', JSON.stringify(profiles));
-                vaultForm.reset();
-                fileLabel.textContent = "Attach Document Image";
-                fileLabel.className = "text-xs text-gray-400";
-                
-                renderIndex();
-                selectProfile(profile.id);
+            Tesseract.recognize(
+                base64Image,
+                'eng',
+                { logger: m => {
+                    if(m.status === 'recognizing') {
+                        scanProgress.textContent = `Analyzing pixels: ${Math.floor(m.progress * 100)}%`;
+                    }
+                }}
+            ).then(({ data: { text } }) => {
+                parseExtractedText(text, base64Image);
+            }).catch(err => {
+                alert("Scan dynamic error occurred. Fallback profile built.");
+                parseExtractedText("", base64Image);
+            }).finally(() => {
+                scannerOverlay.classList.add('hidden');
+                autoFile.value = ''; // Reset target pointer
+            });
+        }
+
+        // Context Regex Extraction Algorithms
+        function parseExtractedText(rawText, base64Image) {
+            console.log("Raw Scanned Data:", rawText);
+            
+            // Cleanup lines array
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+            
+            // Fallback default naming engine if no clear structural name found
+            let parsedName = "Unknown Record Name";
+            let parsedAge = "Auto Processed";
+            let parsedPhone = "Extract Failed";
+            let parsedLocation = "Detected on Image Data";
+
+            // 1. Name Strategy Parser (Usually top lines or near keywords)
+            if(lines.length > 0) {
+                // Skips baseline system labels if captured, otherwise selects line 1 or 2
+                const validLines = lines.filter(l => !/identity|card|republic|passport|driver|license/i.test(l));
+                if(validLines.length > 0) parsedName = validLines[0];
+            }
+
+            // 2. Numerical Age Matcher Engine
+            const ageMatch = rawText.match(/(?:age|dob|born|birth)[:\s]*([\d]{2,4})|(?:^|\s)([\d]{2})(?:\s|$)/i);
+            if(ageMatch) {
+                parsedAge = ageMatch[1] || ageMatch[2];
+            }
+
+            // 3. Telephony Tracking Regex
+            const phoneMatch = rawText.match(/(?:\+?[\d\-\s]{8,15})/);
+            if(phoneMatch && phoneMatch[0].replace(/[\s\-]/g, '').length >= 8) {
+                parsedPhone = phoneMatch[0].trim();
+            }
+
+            // Build structural entry package automatically
+            const autoProfile = {
+                id: Date.now(),
+                name: parsedName,
+                // Relational targets initialize dynamically - ready for secondary processing checks
+                dad: "Scanned on Target Asset",
+                mom: "Scanned on Target Asset",
+                grandpa: "Dynamic Link Pending",
+                grandma: "Dynamic Link Pending",
+                age: parsedAge,
+                phone: parsedPhone,
+                location: parsedLocation,
+                image: base64Image,
+                rawLog: rawText || "No text payload readable on document area.",
+                timestamp: new Date().toLocaleDateString()
             };
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => saveData(reader.result);
-                reader.readAsDataURL(file);
-            } else {
-                saveData();
-            }
-        });
+            profiles.push(autoProfile);
+            localStorage.setItem('xdata_auto_profiles', JSON.stringify(profiles));
+            
+            renderIndex();
+            selectProfile(autoProfile.id);
+        }
 
-        // Group Alphabetically & Render Index Lists
+        // Render sorted UI layouts
         function renderIndex(filterText = '') {
             azListContainer.innerHTML = '';
             const query = filterText.toLowerCase();
 
-            // Filter names
-            const filtered = profiles.filter(p => p.name.toLowerCase().includes(query));
-            indexCount.textContent = `${filtered.length} Profiles`;
+            const filtered = profiles.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.rawLog.toLowerCase().includes(query)
+            );
+            
+            indexCount.textContent = `${filtered.length} Indexed`;
 
             if(filtered.length === 0) {
-                azListContainer.innerHTML = `<div class="text-center text-xs text-gray-600 pt-6">No matching data found</div>`;
+                azListContainer.innerHTML = `<div class="text-center text-xs text-gray-600 pt-6">Vault Workspace Empty</div>`;
                 return;
             }
 
-            // Sort alphabetically by primary name
             filtered.sort((a, b) => a.name.localeCompare(b.name));
 
-            // Bucket profiles by their starting character letter
             const groups = {};
             filtered.forEach(p => {
                 const firstLetter = p.name.charAt(0).toUpperCase();
-                if (!groups[firstLetter]) groups[firstLetter] = [];
-                groups[firstLetter].push(p);
+                const cleanKey = /^[A-Z]$/.test(firstLetter) ? firstLetter : '#';
+                if (!groups[cleanKey]) groups[cleanKey] = [];
+                groups[cleanKey].push(p);
             });
 
-            // Draw A-Z Blocks
             Object.keys(groups).sort().forEach(letter => {
                 const block = document.createElement('div');
-                block.className = "space-y-1.5";
-                block.innerHTML = `<div class="text-xs font-bold font-mono text-cyan-500/70 border-b border-gray-900 px-1 pb-0.5">${letter}</div>`;
+                block.className = "space-y-1";
+                block.innerHTML = `<div class="text-xs font-bold font-mono text-cyan-500/60 border-b border-gray-900 px-1 pb-0.5">${letter}</div>`;
                 
-                const listWrapper = document.createElement('div');
-                listWrapper.className = "space-y-1";
-
                 groups[letter].forEach(profile => {
-                    const row = document.createElement('button');
-                    row.type = "button";
+                    const btn = document.createElement('button');
                     const isSelected = profile.id === selectedProfileId;
-                    row.className = `w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition flex items-center justify-between ${isSelected ? 'bg-cyan-500 text-gray-950 font-bold' : 'bg-gray-900/60 hover:bg-gray-900 text-gray-300'}`;
-                    row.innerHTML = `
-                        <span class="truncate pr-2">${profile.name}</span>
-                        <span class="text-[10px] opacity-60 font-mono font-normal whitespace-nowrap">${profile.age} yrs</span>
-                    `;
-                    row.onclick = () => selectProfile(profile.id);
-                    listWrapper.appendChild(row);
+                    btn.className = `w-full text-left px-3 py-2 rounded-lg text-sm truncate block transition ${isSelected ? 'bg-cyan-500 text-gray-950 font-bold' : 'bg-gray-900/50 hover:bg-gray-900 text-gray-300'}`;
+                    btn.textContent = profile.name;
+                    btn.onclick = () => selectProfile(profile.id);
+                    block.appendChild(btn);
                 });
-                
-                block.appendChild(listWrapper);
                 azListContainer.appendChild(block);
             });
         }
 
-        // View Single Detailed Record inside Inspector View
         function selectProfile(id) {
             selectedProfileId = id;
             const profile = profiles.find(p => p.id === id);
-            
-            // Re-render directory list to highlight current selection background colors
             renderIndex(searchBar.value);
 
             if (!profile) {
-                inspectorPanel.innerHTML = `<div class="text-center text-gray-500"><p>📂 Profile no longer exists</p></div>`;
-                inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col justify-center items-center p-6";
+                inspectorPanel.innerHTML = `<div class="text-center text-gray-500"><p>No Target Selected</p></div>`;
                 return;
             }
 
@@ -247,99 +243,72 @@
             inspectorPanel.innerHTML = `
                 <div class="flex justify-between items-start border-b border-gray-900 pb-4 mb-4">
                     <div>
-                        <h2 class="text-2xl font-black text-white tracking-wide">${profile.name}</h2>
-                        <p class="text-xs text-gray-400 mt-0.5">Database ID Reference: <span class="font-mono text-cyan-400">${profile.id}</span></p>
+                        <h2 class="text-xl font-black text-white tracking-wide">${profile.name}</h2>
+                        <p class="text-[10px] text-gray-500 mt-0.5">Scanned System Reference: <span class="font-mono text-cyan-400">${profile.id}</span></p>
                     </div>
-                    <button onclick="deleteProfile(${profile.id})" class="text-xs bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900 hover:text-white px-2.5 py-1 rounded transition">Delete Profile</button>
+                    <button onclick="deleteProfile(${profile.id})" class="text-xs text-red-400 bg-red-950/20 border border-red-900/40 px-2.5 py-1 rounded hover:bg-red-900 hover:text-white transition">Wipe Record</button>
                 </div>
 
-                <!-- Relational Genealogy Grid Info -->
                 <div class="space-y-4 flex-1">
-                    <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Family Relations</h3>
-                        <div class="grid grid-cols-2 gap-3 bg-gray-900/40 p-4 rounded-xl border border-gray-900">
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Father's Name</span>
-                                <span class="text-sm font-medium text-gray-200">${profile.dad}</span>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Mother's Name</span>
-                                <span class="text-sm font-medium text-gray-200">${profile.mom}</span>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Grandfather</span>
-                                <span class="text-sm font-medium text-gray-200">${profile.grandpa}</span>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Grandmother</span>
-                                <span class="text-sm font-medium text-gray-200">${profile.grandma}</span>
-                            </div>
+                    <!-- Extracted Properties Panel Data -->
+                    <div class="grid grid-cols-2 gap-3 bg-gray-900/30 p-4 rounded-xl border border-gray-900 text-xs">
+                        <div>
+                            <span class="block text-[10px] text-gray-500 uppercase">Extracted Age Data</span>
+                            <span class="text-gray-200 font-medium">${profile.age}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500 uppercase">Contact Link</span>
+                            <span class="text-gray-200 font-mono">${profile.phone}</span>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="block text-[10px] text-gray-500 uppercase">Scanned Location Field</span>
+                            <span class="text-gray-200">${profile.location}</span>
                         </div>
                     </div>
 
-                    <!-- Personal Metrics Info -->
+                    <!-- Scan Image Source Frame -->
                     <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Personal Data Summary</h3>
-                        <div class="grid grid-cols-3 gap-3 bg-gray-900/40 p-4 rounded-xl border border-gray-900 text-sm">
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Current Age</span>
-                                <span class="text-gray-200">${profile.age}</span>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Location Base</span>
-                                <span class="text-gray-200 truncate block">${profile.location}</span>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] uppercase text-gray-500">Phone Number</span>
-                                <span class="text-gray-200 font-mono">${profile.phone}</span>
-                            </div>
+                        <span class="block text-[10px] font-mono uppercase tracking-wider text-cyan-500/70 mb-1.5">Attached Source Asset</span>
+                        <div class="border border-gray-900 rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+                            <img src="${profile.image}" alt="ID Document Viewer" class="w-full h-full object-contain">
                         </div>
                     </div>
 
-                    <!-- Attached Documents Frame -->
+                    <!-- AI Diagnostic Debug Log View -->
                     <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Stored Verification Documents</h3>
-                        <div class="border border-gray-900 rounded-xl overflow-hidden bg-gray-900/20 aspect-video flex items-center justify-center">
-                            ${profile.image ? 
-                                `<img src="${profile.image}" alt="ID Document Viewer" class="w-full h-full object-contain hover:scale-105 transition duration-300">` : 
-                                `<p class="text-xs text-gray-650 italic">No image attachment stored for this profile.</p>`
-                            }
+                        <span class="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1.5">Raw Smart-OCR Text Dump</span>
+                        <div class="bg-gray-900 p-3 rounded-lg border border-gray-850 max-h-32 overflow-y-auto text-[11px] font-mono text-gray-400 whitespace-pre-wrap leading-relaxed">
+                            ${profile.rawLog.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
                         </div>
                     </div>
                 </div>
                 
-                <div class="mt-4 pt-3 border-t border-gray-900 text-[10px] text-gray-500 flex justify-between">
-                    <span>Record Established: ${profile.timestamp}</span>
+                <div class="mt-4 pt-2 border-t border-gray-900 text-[10px] text-gray-600 flex justify-between font-mono">
+                    <span>Processed: ${profile.timestamp}</span>
                 </div>
             `;
         }
 
-        // Wipe Record
         window.deleteProfile = function(id) {
-            if(confirm("Permanently erase this person's record and linked files from system?")) {
+            if(confirm("Confirm deletion of this smart record summary?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_profiles', JSON.stringify(profiles));
+                localStorage.setItem('xdata_auto_profiles', JSON.stringify(profiles));
                 selectedProfileId = null;
-                
-                // Clear inspector panel display state back to raw base
                 inspectorPanel.innerHTML = `
                     <div class="text-center">
-                        <p class="text-lg">📂 No Profile Selected</p>
-                        <p class="text-xs text-gray-600 mt-1">Select a name from the A-Z directory index to inspect details.</p>
+                        <p class="text-lg">📂 Digital Profile Engine</p>
+                        <p class="text-xs text-gray-600 mt-1">Upload an image file to trigger scanning operations.</p>
                     </div>
                 `;
                 inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col justify-center items-center p-6 text-gray-500";
-                
-                renderIndex(searchBar.value);
+                renderIndex();
             }
         }
 
-        // Live filtration sorting query hook
         searchBar.addEventListener('input', (e) => {
             renderIndex(e.target.value);
         });
 
-        // Initialize setup directory arrays
         renderIndex();
     </script>
 </body>
