@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // CYBER INDEX MATRIX v5.1</title>
+    <title>X-DATA // CYBER INDEX MATRIX v5.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
@@ -50,7 +50,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.1</h1>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.2</h1>
             </div>
             <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
                 CORE MATRIX: TARGET DATA INDEXER
@@ -88,7 +88,7 @@
                 </div>
 
                 <button id="scanTriggerBtn" class="w-full bg-green-500 hover:bg-green-400 text-black font-black py-3 rounded-lg text-xs tracking-widest transition uppercase cursor-pointer shadow-lg shadow-green-500/10">
-                    Execute Deep AI Schema Analysis
+                    Execute Precise OCR Label Analysis
                 </button>
             </div>
 
@@ -112,35 +112,51 @@
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی تەواو (ID Holder Name)</label>
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی تەواو (Name)</label>
                                 <input type="text" id="vName" required class="w-full bg-slate-950 text-white font-bold px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">شوێنی لەدایکبوون (Birth Location)</label>
-                                <input type="text" id="vLocation" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">نازناو (Surname)</label>
+                                <input type="text" id="vSurname" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باوک (Father)</label>
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باوك (Father)</label>
                                 <input type="text" id="vDad" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
+                            <div>
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">باپیری باوک (Paternal Grandpa)</label>
+                                <input type="text" id="vGrandpaFirst" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی دایک (Mother)</label>
                                 <input type="text" id="vMom" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
+                            <div>
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">باپیری دایک (Maternal Grandpa)</label>
+                                <input type="text" id="vGrandpaSec" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باپیری یەکەم (1st Grandfather)</label>
-                                <input type="text" id="vGrandpaFirst" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">گروپی خوێن (Blood Type)</label>
+                                <input type="text" id="vBlood" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باپیری دووەم (2nd Grandfather)</label>
-                                <input type="text" id="vGrandpaSec" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">بەرواری لەدایکبوون (Birth Date)</label>
+                                <input type="text" id="vBirthDate" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs">
                             </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">شوێنی لەدایکبوون (Birth Location)</label>
+                            <input type="text" id="vLocation" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                         </div>
                     </div>
 
@@ -152,7 +168,7 @@
                 <!-- Loading HUD Overlay -->
                 <div id="scannerOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col justify-center items-center p-6 text-center z-30">
                     <div class="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Neural Multi-Lingual Pipeline...</p>
+                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Neural Label Pipeline...</p>
                     <p id="scanProgress" class="text-[11px] text-green-600 font-mono mt-1">Processing layout matrix...</p>
                 </div>
             </div>
@@ -224,7 +240,7 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_1')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_2')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
@@ -300,7 +316,7 @@
                 executeProductionIDParser(collectedDataDump);
             } catch (err) {
                 console.error(err);
-                alert("Processing disruption encountered. Defaulting interface vectors to manual edit buffer.");
+                alert("Processing disruption encountered. Mapping to text fallback container.");
                 executeProductionIDParser("");
             } finally {
                 scannerOverlay.classList.add('hidden');
@@ -314,79 +330,62 @@
         }
 
         function executeProductionIDParser(text) {
-            // Split raw data lines and filter out empty items
-            let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+            // Normalize whitespaces, tabs, and clear raw zero-width character variants
+            let cleanText = text.replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ');
 
-            // Background security string headers shield array
-            const forbiddenMatrix = [
-                "جمهورية", "العراق", "كۆمارى", "وزارة", "الداخلية", "وهزارهتى", 
-                "المدنية", "الجوازات", "الاقامة", "بارى", "شارستاتى", "باسمؤرت"
-            ];
-
-            // Filter lines to remove noise lines containing official document background text
-            let validLines = lines.filter(line => {
-                let matchesForbidden = forbiddenMatrix.some(word => line.includes(word));
-                return !matchesForbidden;
-            });
-
-            let extractedName = "";
-            let extractedDad = "";
-            let extractedMom = "";
-            let extractedGrandpaFirst = "";
-            let extractedGrandpaSec = "";
-            let extractedId = "";
-            let extractedAge = "";
-            let extractedLocation = "";
-
-            // 1. Clean serial matching matrix
-            let idMatch = text.match(/\b\d{12}\b/) || text.match(/\b\d{9,11}\b/);
-            if (idMatch) extractedId = idMatch[0];
-
-            // 2. Isolate cleanly read Arabic/Kurdish script text strings
-            let cleanDataPool = validLines.filter(l => /[\u0600-\u06FF]/.test(l));
-
-            // Assign lines to targets securely, avoiding background title garbage
-            if (cleanDataPool.length > 0) extractedName = cleanDataPool[0];
-            if (cleanDataPool.length > 1) extractedDad = cleanDataPool[1];
-            if (cleanDataPool.length > 2) extractedGrandpaFirst = cleanDataPool[2];
-            if (cleanDataPool.length > 3) extractedGrandpaSec = cleanDataPool[3];
-            if (cleanDataPool.length > 4) extractedMom = cleanDataPool[4];
-
-            // Label text trim engine
-            const cleanDebris = (str) => {
-                if (!str) return "";
-                return str.replace(/(الاسم|ناو|الأب|باوك|الأم|دایک|الجد|باپیر|اللقب|الجنس|فصيلة|تاريخ|محل|الولادة|محافظة|:\s*|:-\s*|‎)/g, '').trim();
+            const getField = (regex) => {
+                let match = cleanText.match(regex);
+                return match ? match[1].trim() : "";
             };
 
-            // 3. Dynamic Precision Age Compiler Matrix (Active Sync to 2026 Grid)
-            let birthYearMatch = text.match(/\b(19\d{2}|20\d{2})\b/);
-            let currentYear = new Date().getFullYear(); 
+            // Targeted RegEx matching based on exact National ID dual labels
+            let name = getField(/(?:الاسم\s*[\/|]\s*ناو)\s*:\s*([^\n\d\/:|]+)/);
+            let dad = getField(/(?:الأب\s*[\/|]\s*باوك)\s*:\s*([^\n\d\/:|]+)/);
+            let grandpaFirst = getField(/(?:الجد\s*[\/|]\s*باپیر)\s*:\s*([^\n\d\/:|]+)/);
+            let surname = getField(/(?:اللقب\s*[\/|]\s*نازناو)\s*:\s*([^\n\d\/:|]*)/) || "نەزانراو";
+            let mom = getField(/(?:الأم\s*[\/|]\s*دايک|دایک)\s*:\s*([^\n\d\/:|]+)/);
+            let grandpaSec = "";
+            
+            // Loop array segment traversal to extract separate occurrences of the grandfather string
+            let grandpaSplits = cleanText.split(/(?:الجد\s*[\/|]\s*باپیر)\s*:/);
+            if (grandpaSplits.length > 2) {
+                // Pulls the text after the second occurrence of the label (maternal grandfather)
+                grandpaSec = grandpaSplits[2].split(/[A-Za-z0-9\/:|]/)[0].trim();
+            }
 
-            if (birthYearMatch) {
-                extractedAge = currentYear - parseInt(birthYearMatch[1]);
-            } else if (extractedId && extractedId.length >= 4) {
-                let potentialYear = parseInt(extractedId.substring(0, 4));
+            let bloodType = getField(/(?:فصيلة الدم\s*[\/|]\s*گروپی خوێن)\s*:\s*([A-Za-z+-0-9]+)/);
+            let birthLocation = getField(/(?:محل الولادة\s*[\/|]\s*شوێنی لەدایک بوون|شوێنی لە دایک بوون)\s*:\s*([^\n\d\/:|]+)/);
+            let birthDate = getField(/(?:تاريخ الولادة\s*[\/|]\s*ڕۆژی لەدایک بوون|بەرواری لە دایک بوون)\s*:\s*([\d\/.]+)/);
+
+            // Fetch National Card Identifier (12 digits sequence)
+            let idMatch = cleanText.match(/\b\d{12}\b/);
+            let idNumber = idMatch ? idMatch[0] : "";
+
+            // Age parser context framework (Calculated against current 2026 baseline)
+            let currentYear = 2026;
+            let age = "";
+            if (birthDate) {
+                let yearMatch = birthDate.match(/\b(19\d{2}|20\d{2})\b/);
+                if (yearMatch) age = currentYear - parseInt(yearMatch[1]);
+            } else if (idNumber) {
+                let potentialYear = parseInt(idNumber.substring(0, 4));
                 if (potentialYear > 1920 && potentialYear <= currentYear) {
-                    extractedAge = currentYear - potentialYear;
+                    age = currentYear - potentialYear;
                 }
             }
 
-            // Fallback for location fields
-            for (let line of lines) {
-                if (line.includes("محل") || line.includes("شوێن") || line.includes("لعدايك")) {
-                    extractedLocation = cleanDebris(line);
-                    break;
-                }
-            }
-
-            document.getElementById('vNumber').value = extractedId || "";
-            document.getElementById('vAge').value = extractedAge || "";
-            document.getElementById('vName').value = cleanDebris(extractedName) || ""; 
-            document.getElementById('vDad').value = cleanDebris(extractedDad) || "";
-            document.getElementById('vMom').value = cleanDebris(extractedMom) || "";
-            document.getElementById('vGrandpaFirst').value = cleanDebris(extractedGrandpaFirst) || "";
-            document.getElementById('vGrandpaSec').value = cleanDebris(extractedGrandpaSec) || "";
-            document.getElementById('vLocation').value = cleanDebris(extractedLocation) || "";
+            // Bind values securely straight onto validation fields
+            document.getElementById('vNumber').value = idNumber;
+            document.getElementById('vAge').value = age ? `${age} ساڵ` : "";
+            document.getElementById('vName').value = name;
+            document.getElementById('vSurname').value = surname;
+            document.getElementById('vDad').value = dad;
+            document.getElementById('vMom').value = mom;
+            document.getElementById('vGrandpaFirst').value = grandpaFirst;
+            document.getElementById('vGrandpaSec').value = grandpaSec || "نەزانراو";
+            document.getElementById('vBlood').value = bloodType;
+            document.getElementById('vBirthDate').value = birthDate;
+            document.getElementById('vLocation').value = birthLocation;
         }
 
         vaultVerificationForm.addEventListener('submit', (e) => {
@@ -399,12 +398,15 @@
             const newRecord = {
                 id: Date.now(),
                 name: document.getElementById('vName').value.trim(),
-                idNumber: document.getElementById('vNumber').value.trim(),
-                age: document.getElementById('vAge').value.trim(),
+                surname: document.getElementById('vSurname').value.trim() || 'نەزانراو',
+                idNumber: document.getElementById('vNumber').value.trim() || 'دیاری نەکراوە',
+                age: document.getElementById('vAge').value.trim() || 'دیاری نەکراوە',
                 dad: document.getElementById('vDad').value.trim() || 'دیاری نەکراوە',
                 mom: document.getElementById('vMom').value.trim() || 'دیاری نەکراوە',
                 grandpaFirst: document.getElementById('vGrandpaFirst').value.trim() || 'دیاری نەکراوە',
-                grandpaSec: document.getElementById('vGrandpaSec').value.trim() || 'دیاری نەکراوە',
+                grandpaSec: document.getElementById('vGrandpaSec').value.trim() || 'نەزانراو',
+                blood: document.getElementById('vBlood').value.trim() || 'دیاری نەکراوە',
+                birthDate: document.getElementById('vBirthDate').value.trim() || 'دیاری نەکراوە',
                 location: document.getElementById('vLocation').value.trim() || 'دیاری نەکراوە',
                 frontImg: activeFrontBase64,
                 backImg: activeBackBase64,
@@ -412,7 +414,7 @@
             };
 
             profiles.push(newRecord);
-            localStorage.setItem('xdata_cyber_vault_v5_1', JSON.stringify(profiles));
+            localStorage.setItem('xdata_cyber_vault_v5_2', JSON.stringify(profiles));
             
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
@@ -487,32 +489,48 @@
                 <div class="space-y-4 text-sm font-mono">
                     <div class="bg-black/40 border border-green-900/40 p-4 rounded-xl space-y-3 shadow-inner text-right">
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold font-mono">${currentRecord.idNumber}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ژمارەی ناسنامە</span>
-                        </div>
-                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold">${currentRecord.age} ساڵ</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:تەمەن</span>
-                        </div>
-                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold ku-text">« ${currentRecord.location || 'دیاری نەکراوە'} »</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:شوێنی لە دایک بوون</span>
+                            <span class="text-white font-bold ku-text">${currentRecord.name}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناو</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
                             <span class="text-white font-bold ku-text">${currentRecord.dad}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باوک</span>
-                        </div>
-                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold ku-text">${currentRecord.mom}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی دایک</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:باوک</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
                             <span class="text-white font-bold ku-text">${currentRecord.grandpaFirst}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باپیری یەکەم</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:باپیر</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.surname}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:نازناو</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.mom}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:دایک</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">${currentRecord.grandpaSec}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:باپیر</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold font-mono">${currentRecord.blood}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:گروپی خوێن</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold font-mono">${currentRecord.birthDate}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:بەرواری لە دایک بوون</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold ku-text">« ${currentRecord.location} »</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:شوێنی لە دایک بون</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-green-950/60">
+                            <span class="text-white font-bold font-mono">${currentRecord.idNumber}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ژمارەی ناسنامە</span>
                         </div>
                         <div class="flex justify-between items-center py-1">
-                            <span class="text-white font-bold ku-text">${currentRecord.grandpaSec}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باپیری دووەم</span>
+                            <span class="text-white font-bold">${currentRecord.age}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:تەمەن</span>
                         </div>
                     </div>
 
@@ -534,7 +552,7 @@
         window.wipeDataNode = function(id) {
             if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault_v5_1', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v5_2', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
