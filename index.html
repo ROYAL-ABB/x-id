@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-Data // AI Auto-Vault</title>
+    <title>X-Data // Auto Vault</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tesseract.js for browser-based AI OCR extraction -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+    <!-- High-compatibility version of Tesseract for offline/local file system support -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         body { background-color: #0b0f19; }
         ::-webkit-scrollbar { width: 6px; }
@@ -20,7 +20,7 @@
     <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-black tracking-wider text-cyan-400">X-<span class="text-white">DATA</span></h1>
-            <span class="text-xs bg-cyan-950 text-cyan-400 px-3 py-1 rounded-full border border-cyan-800/50 font-mono animate-pulse">AI Auto-Scanner Active</span>
+            <span class="text-xs bg-cyan-950 text-cyan-400 px-3 py-1 rounded-full border border-cyan-800/50 font-mono">Local AI Scanner</span>
         </div>
     </header>
 
@@ -32,7 +32,7 @@
             
             <!-- Quick Search -->
             <div class="bg-gray-950 p-4 rounded-xl border border-gray-850 shadow-md">
-                <input type="text" id="searchBar" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition" placeholder="🔍 Search scanned files...">
+                <input type="text" id="searchBar" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition" placeholder="🔍 Search records instantly...">
             </div>
 
             <!-- Smart Upload Box -->
@@ -47,14 +47,13 @@
                         <p class="text-base font-bold text-white">Upload ID Document</p>
                         <p class="text-xs text-gray-400 mt-1">Drag and drop or click to scan image</p>
                     </div>
-                    <p class="text-[11px] text-gray-550 border-t border-gray-900 pt-3 italic">System automatically reads text & builds profile layout.</p>
                 </div>
 
                 <!-- Processing Spinner Overlay -->
-                <div id="scannerOverlay" class="absolute inset-0 bg-gray-950/90 hidden flex-col justify-center items-center p-6 rounded-xl z-30 animate-fade-in">
+                <div id="scannerOverlay" class="absolute inset-0 bg-gray-950/90 hidden flex-col justify-center items-center p-6 rounded-xl z-30">
                     <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cyan-400 mb-4"></div>
-                    <p class="text-sm font-bold text-cyan-400 tracking-wide uppercase font-mono">Scanning Document Structure...</p>
-                    <p id="scanProgress" class="text-xs text-gray-400 mt-1">Initializing AI core engine...</p>
+                    <p class="text-sm font-bold text-cyan-400 tracking-wide uppercase font-mono">AI OCR Scanning...</p>
+                    <p id="scanProgress" class="text-xs text-gray-400 mt-1">Reading pixels...</p>
                 </div>
             </div>
         </section>
@@ -62,7 +61,7 @@
         <!-- Center Panel: Alphabetical List Index (3 Cols) -->
         <section class="lg:col-span-3 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-hidden">
             <div class="p-4 border-b border-gray-900 flex justify-between items-center bg-gray-900/20">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">Scanned Records</h2>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">Records</h2>
                 <span id="indexCount" class="text-xs text-cyan-400 font-mono">0 Loaded</span>
             </div>
             <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-4">
@@ -70,7 +69,7 @@
             </div>
         </section>
 
-        <!-- Right Panel: Auto-Generated Deep Data Sheet (5 Cols) -->
+        <!-- Right Panel: Data Sheet Inspector (5 Cols) -->
         <section id="inspectorPanel" class="lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-y-auto p-6 relative justify-center items-center text-gray-500">
             <div class="text-center">
                 <p class="text-lg">📂 Digital Profile Engine</p>
@@ -92,12 +91,12 @@
         let profiles = JSON.parse(localStorage.getItem('xdata_auto_profiles')) || [];
         let selectedProfileId = null;
 
-        // Image Selection Handler -> Instantly Triggers Processing Pipeline
         autoFile.addEventListener('change', (e) => {
             if (e.target.files.length === 0) return;
             
             const file = e.target.files[0];
             scannerOverlay.classList.remove('hidden');
+            scanProgress.textContent = "Loading file...";
             
             const reader = new FileReader();
             reader.onloadend = function() {
@@ -106,75 +105,69 @@
             reader.readAsDataURL(file);
         });
 
-        // OCR Parsing Core
-        function processDocumentImage(base64Image) {
-            scanProgress.textContent = "Reading textual datasets (OCR)...";
-            
-            Tesseract.recognize(
-                base64Image,
-                'eng',
-                { logger: m => {
-                    if(m.status === 'recognizing') {
-                        scanProgress.textContent = `Analyzing pixels: ${Math.floor(m.progress * 100)}%`;
-                    }
-                }}
-            ).then(({ data: { text } }) => {
-                parseExtractedText(text, base64Image);
-            }).catch(err => {
-                alert("Scan dynamic error occurred. Fallback profile built.");
+        // Fixed Local Compatibility OCR Function
+        async function processDocumentImage(base64Image) {
+            try {
+                scanProgress.textContent = "Initializing AI Engine...";
+                
+                // Uses clean implementation to prevent local file protocol blocking
+                const result = await Tesseract.recognize(
+                    base64Image,
+                    'eng',
+                    { logger: m => {
+                        if(m.status === 'recognizing') {
+                            scanProgress.textContent = `Analyzing text: ${Math.floor(m.progress * 100)}%`;
+                        }
+                    }}
+                );
+                
+                parseExtractedText(result.data.text, base64Image);
+            } catch (err) {
+                console.error(err);
+                alert("Scan failed to extract text automatically. Creating empty profile card instead.");
                 parseExtractedText("", base64Image);
-            }).finally(() => {
+            } finally {
                 scannerOverlay.classList.add('hidden');
-                autoFile.value = ''; // Reset target pointer
-            });
+                autoFile.value = '';
+            }
         }
 
-        // Context Regex Extraction Algorithms
         function parseExtractedText(rawText, base64Image) {
-            console.log("Raw Scanned Data:", rawText);
-            
-            // Cleanup lines array
             const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
             
-            // Fallback default naming engine if no clear structural name found
-            let parsedName = "Unknown Record Name";
-            let parsedAge = "Auto Processed";
-            let parsedPhone = "Extract Failed";
-            let parsedLocation = "Detected on Image Data";
+            let parsedName = "Unknown Profile";
+            let parsedAge = "Unknown";
+            let parsedPhone = "Not Found";
+            let parsedLocation = "Detected on Document";
 
-            // 1. Name Strategy Parser (Usually top lines or near keywords)
-            if(lines.length > 0) {
-                // Skips baseline system labels if captured, otherwise selects line 1 or 2
-                const validLines = lines.filter(l => !/identity|card|republic|passport|driver|license/i.test(l));
-                if(validLines.length > 0) parsedName = validLines[0];
+            // Filter out system document keywords to try and capture the person's name
+            const cleanedLines = lines.filter(l => !/identity|card|republic|passport|driver|license|national/i.test(l));
+            if(cleanedLines.length > 0) {
+                parsedName = cleanedLines[0];
             }
 
-            // 2. Numerical Age Matcher Engine
-            const ageMatch = rawText.match(/(?:age|dob|born|birth)[:\s]*([\d]{2,4})|(?:^|\s)([\d]{2})(?:\s|$)/i);
-            if(ageMatch) {
-                parsedAge = ageMatch[1] || ageMatch[2];
-            }
+            // Look for numbers that resemble ages
+            const ageMatch = rawText.match(/(?:age|dob|born)[:\s]*([\d]{2})/i) || rawText.match(/\b([\d]{2})\b/);
+            if(ageMatch) parsedAge = ageMatch[1];
 
-            // 3. Telephony Tracking Regex
+            // Look for telephone combinations
             const phoneMatch = rawText.match(/(?:\+?[\d\-\s]{8,15})/);
             if(phoneMatch && phoneMatch[0].replace(/[\s\-]/g, '').length >= 8) {
                 parsedPhone = phoneMatch[0].trim();
             }
 
-            // Build structural entry package automatically
             const autoProfile = {
                 id: Date.now(),
                 name: parsedName,
-                // Relational targets initialize dynamically - ready for secondary processing checks
-                dad: "Scanned on Target Asset",
-                mom: "Scanned on Target Asset",
+                dad: "Extracted on Target Asset",
+                mom: "Extracted on Target Asset",
                 grandpa: "Dynamic Link Pending",
                 grandma: "Dynamic Link Pending",
                 age: parsedAge,
                 phone: parsedPhone,
                 location: parsedLocation,
                 image: base64Image,
-                rawLog: rawText || "No text payload readable on document area.",
+                rawLog: rawText || "No readable text discovered on document face.",
                 timestamp: new Date().toLocaleDateString()
             };
 
@@ -185,7 +178,6 @@
             selectProfile(autoProfile.id);
         }
 
-        // Render sorted UI layouts
         function renderIndex(filterText = '') {
             azListContainer.innerHTML = '';
             const query = filterText.toLowerCase();
@@ -195,10 +187,10 @@
                 p.rawLog.toLowerCase().includes(query)
             );
             
-            indexCount.textContent = `${filtered.length} Indexed`;
+            indexCount.textContent = `${filtered.length} Cards`;
 
             if(filtered.length === 0) {
-                azListContainer.innerHTML = `<div class="text-center text-xs text-gray-600 pt-6">Vault Workspace Empty</div>`;
+                azListContainer.innerHTML = `<div class="text-center text-xs text-gray-600 pt-6">Vault Empty</div>`;
                 return;
             }
 
@@ -235,7 +227,7 @@
             renderIndex(searchBar.value);
 
             if (!profile) {
-                inspectorPanel.innerHTML = `<div class="text-center text-gray-500"><p>No Target Selected</p></div>`;
+                inspectorPanel.innerHTML = `<div class="text-center text-gray-500"><p>No Profile Selected</p></div>`;
                 return;
             }
 
@@ -244,13 +236,12 @@
                 <div class="flex justify-between items-start border-b border-gray-900 pb-4 mb-4">
                     <div>
                         <h2 class="text-xl font-black text-white tracking-wide">${profile.name}</h2>
-                        <p class="text-[10px] text-gray-500 mt-0.5">Scanned System Reference: <span class="font-mono text-cyan-400">${profile.id}</span></p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">Reference ID: <span class="font-mono text-cyan-400">${profile.id}</span></p>
                     </div>
-                    <button onclick="deleteProfile(${profile.id})" class="text-xs text-red-400 bg-red-950/20 border border-red-900/40 px-2.5 py-1 rounded hover:bg-red-900 hover:text-white transition">Wipe Record</button>
+                    <button onclick="deleteProfile(${profile.id})" class="text-xs text-red-400 bg-red-950/20 border border-red-900/40 px-2.5 py-1 rounded hover:bg-red-900 hover:text-white transition">Delete</button>
                 </div>
 
                 <div class="space-y-4 flex-1">
-                    <!-- Extracted Properties Panel Data -->
                     <div class="grid grid-cols-2 gap-3 bg-gray-900/30 p-4 rounded-xl border border-gray-900 text-xs">
                         <div>
                             <span class="block text-[10px] text-gray-500 uppercase">Extracted Age Data</span>
@@ -266,31 +257,25 @@
                         </div>
                     </div>
 
-                    <!-- Scan Image Source Frame -->
                     <div>
-                        <span class="block text-[10px] font-mono uppercase tracking-wider text-cyan-500/70 mb-1.5">Attached Source Asset</span>
+                        <span class="block text-[10px] font-mono uppercase tracking-wider text-cyan-500/70 mb-1.5">Attached Source ID</span>
                         <div class="border border-gray-900 rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
                             <img src="${profile.image}" alt="ID Document Viewer" class="w-full h-full object-contain">
                         </div>
                     </div>
 
-                    <!-- AI Diagnostic Debug Log View -->
                     <div>
-                        <span class="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1.5">Raw Smart-OCR Text Dump</span>
+                        <span class="block text-[10px] font-mono uppercase tracking-wider text-gray-500 mb-1.5">Raw Text Payload</span>
                         <div class="bg-gray-900 p-3 rounded-lg border border-gray-850 max-h-32 overflow-y-auto text-[11px] font-mono text-gray-400 whitespace-pre-wrap leading-relaxed">
                             ${profile.rawLog.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-4 pt-2 border-t border-gray-900 text-[10px] text-gray-600 flex justify-between font-mono">
-                    <span>Processed: ${profile.timestamp}</span>
-                </div>
             `;
         }
 
         window.deleteProfile = function(id) {
-            if(confirm("Confirm deletion of this smart record summary?")) {
+            if(confirm("Delete this card?")) {
                 profiles = profiles.filter(p => p.id !== id);
                 localStorage.setItem('xdata_auto_profiles', JSON.stringify(profiles));
                 selectedProfileId = null;
@@ -300,7 +285,6 @@
                         <p class="text-xs text-gray-600 mt-1">Upload an image file to trigger scanning operations.</p>
                     </div>
                 `;
-                inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col justify-center items-center p-6 text-gray-500";
                 renderIndex();
             }
         }
