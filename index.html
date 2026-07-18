@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // CYBER INDEX MATRIX v4.0</title>
+    <title>X-DATA // CYBER INDEX MATRIX v4.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
@@ -50,7 +50,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v4.0</h1>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v4.2</h1>
             </div>
             <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
                 CORE MATRIX: TARGET DATA INDEXER
@@ -68,7 +68,6 @@
                 <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-4 ku-text">// بارکردنی ناسنامە (Dual-Side Capture)</h2>
                 
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <!-- Front Side Capture Trigger Box -->
                     <div onclick="openCaptureModal('front')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
                         <div id="previewFront" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
                         <div id="contentFront" class="space-y-1">
@@ -78,7 +77,6 @@
                         </div>
                     </div>
 
-                    <!-- Back Side Capture Trigger Box -->
                     <div onclick="openCaptureModal('back')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
                         <div id="previewBack" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
                         <div id="contentBack" class="space-y-1">
@@ -136,8 +134,8 @@
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی داپیر (Grandmother Name)</label>
-                                <input type="text" id="vGrandma" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
+                                <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باپیری یەکەم (1st Grandfather)</label>
+                                <input type="text" id="vGrandpaFirst" class="w-full bg-slate-950 text-green-400 px-3 py-2.5 rounded border border-green-900/60 focus:outline-none matrix-border text-xs ku-text">
                             </div>
                             <div>
                                 <label class="block text-[10px] uppercase text-green-600 font-bold mb-1 ku-text">ناوی باپیری دووەم (2nd Grandfather)</label>
@@ -226,7 +224,7 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v4')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v4_2')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
@@ -315,74 +313,64 @@
             }
         }
 
-        // Exact Character Extraction Architecture & Precision Age Compiler
         function executeProductionIDParser(text) {
             let cleanText = text.replace(/[\/\(\)\-\[\]]/g, ' ').replace(/\s+/g, ' ');
 
             let extractedName = "";
             let extractedDad = "";
             let extractedMom = "";
-            let extractedGrandma = "";
+            let extractedGrandpaFirst = "";
             let extractedGrandpaSec = "";
             let extractedId = "";
             let extractedAge = "";
             let extractedLocation = "";
 
-            // 1. Precise Serial Extraction Regex Array
             let idMatch = text.match(/\b\d{12}\b/) || text.match(/\b\d{9,11}\b/);
             if (idMatch) extractedId = idMatch[0];
 
-            // 2. Strict Unicode Native Character Layout Matching (Matches structural ID layout tokens perfectly)
             let nameRegex = /(?:الاسم|ناو)[:\s]+([\u0600-\u06FF\s]+)/;
             let dadRegex = /(?:الأب|باوك)[:\s]+([\u0600-\u06FF\s]+)/;
             let momRegex = /(?:الأم|دایک)[:\s]+([\u0600-\u06FF\s]+)/;
-            let grandmaRegex = /(?:الجدة|داپیر)[:\s]+([\u0600-\u06FF\s]+)/;
-            
-            // Extracts second grandparent sequence by structural position layout markers
-            let grandpaSecRegex = /(?:الجد|باپیر)[:\s]+([\u0600-\u06FF\s]+)/;
+            let grandpaFirstRegex = /(?:الجد|باپیر)[:\s]+([\u0600-\u06FF\s]+)/;
             let locationRegex = /(?:محل الولادة|شوێنی لەدایکبوون)[:\s]+([\u0600-\u06FF\s]+)/;
 
             let nM = cleanText.match(nameRegex);
             let dM = cleanText.match(dadRegex);
             let mM = cleanText.match(momRegex);
-            let gmM = cleanText.match(grandmaRegex);
-            let gpM = cleanText.match(grandpaSecRegex);
+            let gpFirstM = cleanText.match(grandpaFirstRegex);
             let locM = cleanText.match(locationRegex);
 
             if (nM) extractedName = nM[1].split(/[A-Za-z0-9]/)[0].trim();
             if (dM) extractedDad = dM[1].trim().split(" ")[0];
             if (mM) extractedMom = mM[1].trim().split(" ")[0];
-            if (gmM) extractedGrandma = gmM[1].trim().split(" ")[0];
-            if (gpM) extractedGrandpaSec = gpM[1].trim().split(" ")[0];
+            if (gpFirstM) extractedGrandpaFirst = gpFirstM[1].trim().split(" ")[0];
             if (locM) extractedLocation = locM[1].trim().split(" ")[0];
 
-            // 3. True-Calendar Live Age Processing Component
+            // DYNAMIC CALENDAR COMPILER (Reads live system year down to the millisecond)
             let birthYearMatch = text.match(/\b(19\d{2}|20\d{2})\b/);
-            let currentYear = 2026; 
+            let currentYear = new Date().getFullYear(); 
 
             if (birthYearMatch) {
                 extractedAge = currentYear - parseInt(birthYearMatch[1]);
-            } else if (extractedId.length >= 4) {
+            } else if (extractedId && extractedId.length >= 4) {
                 let potentialYear = parseInt(extractedId.substring(0, 4));
                 if (potentialYear > 1920 && potentialYear <= currentYear) {
                     extractedAge = currentYear - potentialYear;
                 }
             }
 
-            // Text parsing normalization helper function
             const cleanDebris = (str) => str.replace(/(اللقب|الجنس|فصيلة|تاريخ|محل|الولادة|محافظة)/g, '').trim();
 
-            document.getElementById('vNumber').value = extractedId || "198039956896";
-            document.getElementById('vAge').value = extractedAge || "46";
-            document.getElementById('vName').value = cleanDebris(extractedName) || "حافظه"; 
-            document.getElementById('vDad').value = cleanDebris(extractedDad) || "صالح";
-            document.getElementById('vMom').value = cleanDebris(extractedMom) || "ياسمين";
-            document.getElementById('vGrandma').value = cleanDebris(extractedGrandma) || "حمد";
-            document.getElementById('vGrandpaSec').value = cleanDebris(extractedGrandpaSec) || "عبدالرحمن";
-            document.getElementById('vLocation').value = cleanDebris(extractedLocation) || "أربيل";
+            document.getElementById('vNumber').value = extractedId || "";
+            document.getElementById('vAge').value = extractedAge || "";
+            document.getElementById('vName').value = cleanDebris(extractedName) || ""; 
+            document.getElementById('vDad').value = cleanDebris(extractedDad) || "";
+            document.getElementById('vMom').value = cleanDebris(extractedMom) || "";
+            document.getElementById('vGrandpaFirst').value = cleanDebris(extractedGrandpaFirst) || "";
+            document.getElementById('vGrandpaSec').value = cleanDebris(extractedGrandpaSec) || "";
+            document.getElementById('vLocation').value = cleanDebris(extractedLocation) || "";
         }
 
-        // Final Storage Layer Module with exact date/time matrix injection
         vaultVerificationForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -397,7 +385,7 @@
                 age: document.getElementById('vAge').value.trim(),
                 dad: document.getElementById('vDad').value.trim() || 'دیاری نەکراوە',
                 mom: document.getElementById('vMom').value.trim() || 'دیاری نەکراوە',
-                grandma: document.getElementById('vGrandma').value.trim() || 'دیاری نەکراوە',
+                grandpaFirst: document.getElementById('vGrandpaFirst').value.trim() || 'دیاری نەکراوە',
                 grandpaSec: document.getElementById('vGrandpaSec').value.trim() || 'دیاری نەکراوە',
                 location: document.getElementById('vLocation').value.trim() || 'دیاری نەکراوە',
                 frontImg: activeFrontBase64,
@@ -406,7 +394,7 @@
             };
 
             profiles.push(newRecord);
-            localStorage.setItem('xdata_cyber_vault_v4', JSON.stringify(profiles));
+            localStorage.setItem('xdata_cyber_vault_v4_2', JSON.stringify(profiles));
             
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
@@ -438,7 +426,6 @@
 
             filteredNodes.sort((a, b) => a.name.localeCompare(b.name));
 
-            // Dynamic Image Array Priority Loading Array
             filteredNodes.forEach(node => {
                 const item = document.createElement('div');
                 const isSelected = node.id === selectedProfileId;
@@ -459,7 +446,6 @@
             });
         }
 
-        // Full Interactive Kurdish Sorani Inspection Node Readout Module
         function selectActiveNodeProfile(id) {
             selectedProfileId = id;
             const currentRecord = profiles.find(p => p.id === id);
@@ -480,7 +466,6 @@
                     </div>
                 </div>
 
-                <!-- Decoded Dataset Frame -->
                 <div class="space-y-4 text-sm font-mono">
                     <div class="bg-black/40 border border-green-900/40 p-4 rounded-xl space-y-3 shadow-inner text-right">
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
@@ -492,8 +477,8 @@
                             <span class="text-green-500 text-xs font-bold ku-text">:تەمەن</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold ku-text">${currentRecord.location}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:شوێنی لەدایکبوون</span>
+                            <span class="text-white font-bold ku-text">« ${currentRecord.location} »</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:شوێنی لە دایک بوون</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
                             <span class="text-white font-bold ku-text">${currentRecord.dad}</span>
@@ -504,8 +489,8 @@
                             <span class="text-green-500 text-xs font-bold ku-text">:ناوی دایک</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold ku-text">${currentRecord.grandma}</span>
-                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی داپیر</span>
+                            <span class="text-white font-bold ku-text">${currentRecord.grandpaFirst}</span>
+                            <span class="text-green-500 text-xs font-bold ku-text">:ناوی باپیری یەکەم</span>
                         </div>
                         <div class="flex justify-between items-center py-1">
                             <span class="text-white font-bold ku-text">${currentRecord.grandpaSec}</span>
@@ -513,7 +498,6 @@
                         </div>
                     </div>
 
-                    <!-- Explicit Time Log String Indicator -->
                     <div class="text-[10px] text-green-600/80 font-mono text-center bg-green-950/20 border border-green-900/40 p-2 rounded-lg dir-ltr">
                         💾 SYSTEM_LOG_TIME: ${currentRecord.savedAt}
                     </div>
@@ -532,7 +516,7 @@
         window.wipeDataNode = function(id) {
             if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault_v4', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v4_2', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
