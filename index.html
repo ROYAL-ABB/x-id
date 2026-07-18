@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // CYBER INDEX MATRIX v5.2</title>
+    <title>X-DATA // CYBER INDEX MATRIX v5.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
@@ -50,7 +50,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.2</h1>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.3</h1>
             </div>
             <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
                 CORE MATRIX: TARGET DATA INDEXER
@@ -88,7 +88,7 @@
                 </div>
 
                 <button id="scanTriggerBtn" class="w-full bg-green-500 hover:bg-green-400 text-black font-black py-3 rounded-lg text-xs tracking-widest transition uppercase cursor-pointer shadow-lg shadow-green-500/10">
-                    Execute Precise OCR Label Analysis
+                    Execute Resilient Data Parsing
                 </button>
             </div>
 
@@ -168,7 +168,7 @@
                 <!-- Loading HUD Overlay -->
                 <div id="scannerOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col justify-center items-center p-6 text-center z-30">
                     <div class="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Neural Label Pipeline...</p>
+                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Resilient Splitting Engine...</p>
                     <p id="scanProgress" class="text-[11px] text-green-600 font-mono mt-1">Processing layout matrix...</p>
                 </div>
             </div>
@@ -240,7 +240,7 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_2')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_3')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
@@ -330,38 +330,58 @@
         }
 
         function executeProductionIDParser(text) {
-            // Normalize whitespaces, tabs, and clear raw zero-width character variants
-            let cleanText = text.replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ');
+            // Normalize characters, replace common OCR errors with readable symbols
+            let cleanText = text.replace(/[\u200B-\u200D\uFEFF]/g, '')
+                                .replace(/[|I\[\]]/g, ':') 
+                                .replace(/\s+/g, ' ');
 
-            const getField = (regex) => {
-                let match = cleanText.match(regex);
-                return match ? match[1].trim() : "";
+            // Fallback extractor breaks lines by word indexes if punctuation symbols vanish completely
+            const extractSegmentAfterKeyword = (keywords, textPool) => {
+                for (let keyword of keywords) {
+                    if (textPool.includes(keyword)) {
+                        let splitParts = textPool.split(keyword);
+                        if (splitParts.length > 1) {
+                            let dirtySegment = splitParts[1].trim();
+                            // Strip lingering punctuation modifiers at the front of value line
+                            dirtySegment = dirtySegment.replace(/^[:\s\-=\/]+/, '');
+                            // Cut line cleanly at trailing labels or break lines
+                            let cleanChunk = dirtySegment.split(/الاسم|ناو|الأب|باوك|الجد|باپیر|اللقب|نازناو|الأم|دایک|الجنس|ردگەز|فصيلة|گروپی|محل|شوێنی|تاريخ|روژی/)[0].trim();
+                            return cleanChunk;
+                        }
+                    }
+                }
+                return "";
             };
 
-            // Targeted RegEx matching based on exact National ID dual labels
-            let name = getField(/(?:الاسم\s*[\/|]\s*ناو)\s*:\s*([^\n\d\/:|]+)/);
-            let dad = getField(/(?:الأب\s*[\/|]\s*باوك)\s*:\s*([^\n\d\/:|]+)/);
-            let grandpaFirst = getField(/(?:الجد\s*[\/|]\s*باپیر)\s*:\s*([^\n\d\/:|]+)/);
-            let surname = getField(/(?:اللقب\s*[\/|]\s*نازناو)\s*:\s*([^\n\d\/:|]*)/) || "نەزانراو";
-            let mom = getField(/(?:الأم\s*[\/|]\s*دايک|دایک)\s*:\s*([^\n\d\/:|]+)/);
+            // 1. Keyword Segment Parsing Maps
+            let name = extractSegmentAfterKeyword(["الاسم", "ناو"], cleanText);
+            let dad = extractSegmentAfterKeyword(["الأب", "باوك", "باوک"], cleanText);
+            let surname = extractSegmentAfterKeyword(["اللقب", "نازناو"], cleanText) || "نەزانراو";
+            let mom = extractSegmentAfterKeyword(["الأم", "دايک", "دایک"], cleanText);
+            let bloodType = extractSegmentAfterKeyword(["فصيلة الدم", "گروپی خوێن"], cleanText);
+            let birthLocation = extractSegmentAfterKeyword(["محل الولادة", "شوێنی لەدایک بوون", "شوێنی لە دایک بوون"], cleanText);
+            let birthDate = extractSegmentAfterKeyword(["تاريخ الولادة", "ڕۆژی لەدایک بوون", "بەرواری لە دایک بوون"], cleanText);
+
+            // 2. Sequential Grandfather Separation Logic
+            let grandpaFirst = "";
             let grandpaSec = "";
+            let grandpaSplits = cleanText.split(/الجد\s*:\s*|باپیر\s*:/);
             
-            // Loop array segment traversal to extract separate occurrences of the grandfather string
-            let grandpaSplits = cleanText.split(/(?:الجد\s*[\/|]\s*باپیر)\s*:/);
+            if (grandpaSplits.length > 1) {
+                grandpaFirst = grandpaSplits[1].split(/الاسم|ناو|الأب|باوك|اللقب|نازناو|الأم|دایک|الجد|باپیر/)[0].replace(/^[:\s\-=\/]+/, '').trim();
+            }
             if (grandpaSplits.length > 2) {
-                // Pulls the text after the second occurrence of the label (maternal grandfather)
-                grandpaSec = grandpaSplits[2].split(/[A-Za-z0-9\/:|]/)[0].trim();
+                grandpaSec = grandpaSplits[2].split(/الاسم|ناو|الأب|باوك|اللقب|نازناو|الأم|دایک|الجد|باپیر/)[0].replace(/^[:\s\-=\/]+/, '').trim();
             }
 
-            let bloodType = getField(/(?:فصيلة الدم\s*[\/|]\s*گروپی خوێن)\s*:\s*([A-Za-z+-0-9]+)/);
-            let birthLocation = getField(/(?:محل الولادة\s*[\/|]\s*شوێنی لەدایک بوون|شوێنی لە دایک بوون)\s*:\s*([^\n\d\/:|]+)/);
-            let birthDate = getField(/(?:تاريخ الولادة\s*[\/|]\s*ڕۆژی لەدایک بوون|بەرواری لە دایک بوون)\s*:\s*([\d\/.]+)/);
+            // Cleanup remaining trailing symbols from extracted variables
+            const sanitizeOutput = (val) => val.replace(/[:\/=\-_]/g, '').trim();
 
-            // Fetch National Card Identifier (12 digits sequence)
+            // 3. Extract National Identifier (12 digits sequence)
             let idMatch = cleanText.match(/\b\d{12}\b/);
             let idNumber = idMatch ? idMatch[0] : "";
 
-            // Age parser context framework (Calculated against current 2026 baseline)
+            // Age parser algorithm context framework (Current target timeline baseline: 2026)
             let currentYear = 2026;
             let age = "";
             if (birthDate) {
@@ -374,18 +394,18 @@
                 }
             }
 
-            // Bind values securely straight onto validation fields
+            // Bind values securely directly inside form elements
             document.getElementById('vNumber').value = idNumber;
             document.getElementById('vAge').value = age ? `${age} ساڵ` : "";
-            document.getElementById('vName').value = name;
-            document.getElementById('vSurname').value = surname;
-            document.getElementById('vDad').value = dad;
-            document.getElementById('vMom').value = mom;
-            document.getElementById('vGrandpaFirst').value = grandpaFirst;
-            document.getElementById('vGrandpaSec').value = grandpaSec || "نەزانراو";
-            document.getElementById('vBlood').value = bloodType;
-            document.getElementById('vBirthDate').value = birthDate;
-            document.getElementById('vLocation').value = birthLocation;
+            document.getElementById('vName').value = sanitizeOutput(name);
+            document.getElementById('vSurname').value = sanitizeOutput(surname);
+            document.getElementById('vDad').value = sanitizeOutput(dad);
+            document.getElementById('vMom').value = sanitizeOutput(mom);
+            document.getElementById('vGrandpaFirst').value = sanitizeOutput(grandpaFirst);
+            document.getElementById('vGrandpaSec').value = sanitizeOutput(grandpaSec) || "نەزانراو";
+            document.getElementById('vBlood').value = sanitizeOutput(bloodType);
+            document.getElementById('vBirthDate').value = birthDate.match(/[\d\/.]+/) ? birthDate.match(/[\d\/.]+/)[0] : birthDate;
+            document.getElementById('vLocation').value = sanitizeOutput(birthLocation);
         }
 
         vaultVerificationForm.addEventListener('submit', (e) => {
@@ -414,7 +434,7 @@
             };
 
             profiles.push(newRecord);
-            localStorage.setItem('xdata_cyber_vault_v5_2', JSON.stringify(profiles));
+            localStorage.setItem('xdata_cyber_vault_v5_3', JSON.stringify(profiles));
             
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
@@ -552,7 +572,7 @@
         window.wipeDataNode = function(id) {
             if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault_v5_2', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v5_3', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
