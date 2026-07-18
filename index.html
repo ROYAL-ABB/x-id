@@ -3,196 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-Data // ID Vault</title>
-    <!-- Tailwind CSS for styling -->
+    <title>X-Data // Relational Vault</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #0b0f19;
-        }
+        body { background-color: #0b0f19; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
     </style>
 </head>
-<body class="text-gray-100 font-sans min-h-screen">
+<body class="text-gray-100 font-sans min-h-screen flex flex-col">
 
     <!-- Navbar -->
     <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-black tracking-wider text-cyan-400">X-<span class="text-white">DATA</span></h1>
-            <span class="text-xs bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">Local Vault</span>
+            <span class="text-xs bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full border border-gray-700">A-Z Extended Directory</span>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-80px)] overflow-hidden">
         
-        <!-- Left Column: Upload Form -->
-        <section class="md:col-span-1 bg-gray-950 p-6 rounded-2xl border border-gray-850 h-fit shadow-xl">
-            <h2 class="text-xl font-bold mb-4 text-white">Upload New ID</h2>
-            <form id="uploadForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Full Name</label>
-                    <input type="text" id="idName" required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 transition" placeholder="John Doe">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Document Type</label>
-                    <select id="idType" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 transition">
-                        <option value="Identity Card">Identity Card</option>
-                        <option value="Passport">Passport</option>
-                        <option value="Driver License">Driver's License</option>
-                        <option value="Other">Other Document</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">ID / Document Number</label>
-                    <input type="text" id="idNumber" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 transition" placeholder="Optional">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Upload Document Image</label>
-                    <div class="relative border-2 border-dashed border-gray-800 rounded-lg p-4 text-center hover:border-cyan-500 transition cursor-pointer bg-gray-900/50">
-                        <input type="file" id="idFile" accept="image/*" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        <p id="fileNameDisplay" class="text-sm text-gray-400">Click or drag image file here</p>
+        <!-- Left Panel: Form & Search (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-4 h-full overflow-y-auto pr-1">
+            
+            <!-- Search Widget -->
+            <div class="bg-gray-950 p-4 rounded-xl border border-gray-850 shadow-md">
+                <input type="text" id="searchBar" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition" placeholder="🔍 Search profiles instantly...">
+            </div>
+
+            <!-- Profile Creation Form -->
+            <div class="bg-gray-950 p-5 rounded-xl border border-gray-850 shadow-xl">
+                <h2 class="text-lg font-bold mb-3 text-white">Create New Profile</h2>
+                <form id="vaultForm" class="space-y-3 text-sm">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">Full Name</label>
+                        <input type="text" id="pName" required class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 text-white focus:outline-none focus:border-cyan-500 transition" placeholder="Primary Name">
                     </div>
-                </div>
-                <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-950 font-bold py-2.5 rounded-lg transition shadow-lg shadow-cyan-500/10">
-                    Save Document
-                </button>
-            </form>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Father's Name</label>
+                            <input type="text" id="pDad" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Mother's Name</label>
+                            <input type="text" id="pMom" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Grandfather's Name</label>
+                            <input type="text" id="pGrandpa" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Grandmother's Name</label>
+                            <input type="text" id="pGrandma" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Age / YOB</label>
+                            <input type="text" id="pAge" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="e.g. 28">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-0.5">Phone Number</label>
+                            <input type="tel" id="pPhone" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="+1...">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">Location / Address</label>
+                        <input type="text" id="pLocation" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" placeholder="City, Country">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-0.5">ID Card / Document Attachment</label>
+                        <div class="relative border border-dashed border-gray-800 rounded bg-gray-900 py-3 text-center cursor-pointer hover:border-cyan-500 transition">
+                            <input type="file" id="pFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+                            <p id="fileLabel" class="text-xs text-gray-400">Attach Document Image</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-gray-950 font-bold py-2 rounded transition shadow-lg mt-2">
+                        Save Profile
+                    </button>
+                </form>
+            </div>
         </section>
 
-        <!-- Right Column: Data View & Search -->
-        <section class="md:col-span-2 space-y-6">
-            <!-- Search Bar -->
-            <div class="bg-gray-950 p-4 rounded-xl border border-gray-850 flex items-center shadow-md">
-                <input type="text" id="searchBar" class="w-full bg-transparent text-lg text-white placeholder-gray-500 focus:outline-none" placeholder="🔍 Search records by name, type, or number...">
+        <!-- Center Panel: A-Z Directory List (3 Cols) -->
+        <section class="lg:col-span-3 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-gray-900 flex justify-between items-center bg-gray-900/20">
+                <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400">A-Z Index</h2>
+                <span id="indexCount" class="text-xs text-cyan-400 font-mono">0 Loaded</span>
             </div>
-
-            <!-- ID Gallery Grid -->
-            <div>
-                <h2 class="text-xl font-bold mb-4 text-white flex justify-between items-center">
-                    Stored Records 
-                    <span id="recordCount" class="text-sm font-normal text-gray-400">0 records</span>
-                </h2>
-                <div id="recordsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Dynamic cards will append here -->
-                </div>
+            
+            <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-4">
+                <!-- A-Z Alphabetical Blocks Render Here -->
             </div>
         </section>
+
+        <!-- Right Panel: Expanded Information Inspector (5 Cols) -->
+        <section id="inspectorPanel" class="lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col overflow-y-auto p-6 relative justify-center items-center text-gray-500">
+            <div class="text-center">
+                <p class="text-lg">📂 No Profile Selected</p>
+                <p class="text-xs text-gray-600 mt-1">Select a name from the A-Z directory index to inspect details.</p>
+            </div>
+        </section>
+
     </main>
 
-    <!-- JavaScript logic -->
     <script>
-        const uploadForm = document.getElementById('uploadForm');
-        const idFile = document.getElementById('idFile');
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const vaultForm = document.getElementById('vaultForm');
+        const pFile = document.getElementById('pFile');
+        const fileLabel = document.getElementById('fileLabel');
         const searchBar = document.getElementById('searchBar');
-        const recordsContainer = document.getElementById('recordsContainer');
-        const recordCount = document.getElementById('recordCount');
+        const azListContainer = document.getElementById('azListContainer');
+        const indexCount = document.getElementById('indexCount');
+        const inspectorPanel = document.getElementById('inspectorPanel');
 
-        let db = JSON.parse(localStorage.getItem('xdata_vault')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_profiles')) || [];
+        let selectedProfileId = null;
 
-        // File name update preview
-        idFile.addEventListener('change', (e) => {
+        // Visual feedback for file attachment
+        pFile.addEventListener('change', (e) => {
             if(e.target.files.length > 0) {
-                fileNameDisplay.textContent = e.target.files[0].name;
-                fileNameDisplay.classList.remove('text-gray-400');
-                fileNameDisplay.classList.add('text-cyan-400', 'font-medium');
+                fileLabel.textContent = e.target.files[0].name;
+                fileLabel.className = "text-xs text-cyan-400 font-semibold truncate px-2";
             }
         });
 
-        // Form submission (Save ID)
-        uploadForm.addEventListener('submit', (e) => {
+        // Add Profile Event
+        vaultForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            const file = pFile.files[0];
             
-            const file = idFile.files[0];
-            const reader = new FileReader();
-            
-            reader.onloadend = function() {
-                const newRecord = {
+            const saveData = (imgData = null) => {
+                const profile = {
                     id: Date.now(),
-                    name: document.getElementById('idName').value,
-                    type: document.getElementById('idType').value,
-                    number: document.getElementById('idNumber').value || 'N/A',
-                    image: reader.result, // base64 encoded string
-                    dateAdded: new Date().toLocaleDateString()
+                    name: document.getElementById('pName').value.trim(),
+                    dad: document.getElementById('pDad').value.trim() || 'Not Provided',
+                    mom: document.getElementById('pMom').value.trim() || 'Not Provided',
+                    grandpa: document.getElementById('pGrandpa').value.trim() || 'Not Provided',
+                    grandma: document.getElementById('pGrandma').value.trim() || 'Not Provided',
+                    age: document.getElementById('pAge').value.trim() || 'Unknown',
+                    phone: document.getElementById('pPhone').value.trim() || 'No Contact',
+                    location: document.getElementById('pLocation').value.trim() || 'Unknown Address',
+                    image: imgData,
+                    timestamp: new Date().toLocaleDateString()
                 };
                 
-                db.push(newRecord);
-                localStorage.setItem('xdata_vault', JSON.stringify(db));
+                profiles.push(profile);
+                localStorage.setItem('xdata_profiles', JSON.stringify(profiles));
+                vaultForm.reset();
+                fileLabel.textContent = "Attach Document Image";
+                fileLabel.className = "text-xs text-gray-400";
                 
-                uploadForm.reset();
-                fileNameDisplay.textContent = "Click or drag image file here";
-                fileNameDisplay.className = "text-sm text-gray-400";
-                
-                renderRecords();
-            }
-            
+                renderIndex();
+                selectProfile(profile.id);
+            };
+
             if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => saveData(reader.result);
                 reader.readAsDataURL(file);
+            } else {
+                saveData();
             }
         });
 
-        // Render records to interface
-        function renderRecords(filterText = '') {
-            recordsContainer.innerHTML = '';
+        // Group Alphabetically & Render Index Lists
+        function renderIndex(filterText = '') {
+            azListContainer.innerHTML = '';
             const query = filterText.toLowerCase();
-            
-            const filtered = db.filter(item => 
-                item.name.toLowerCase().includes(query) || 
-                item.type.toLowerCase().includes(query) || 
-                item.number.toLowerCase().includes(query)
-            );
 
-            recordCount.textContent = `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`;
+            // Filter names
+            const filtered = profiles.filter(p => p.name.toLowerCase().includes(query));
+            indexCount.textContent = `${filtered.length} Profiles`;
 
             if(filtered.length === 0) {
-                recordsContainer.innerHTML = `
-                    <div class="col-span-full border border-dashed border-gray-800 rounded-xl p-8 text-center text-gray-500">
-                        No matching documents found.
-                    </div>
-                `;
+                azListContainer.innerHTML = `<div class="text-center text-xs text-gray-600 pt-6">No matching data found</div>`;
                 return;
             }
 
-            filtered.reverse().forEach(record => {
-                const card = document.createElement('div');
-                card.className = "bg-gray-950 border border-gray-850 rounded-xl overflow-hidden shadow-lg group hover:border-gray-700 transition flex flex-col";
-                card.innerHTML = `
-                    <div class="relative aspect-video bg-gray-900 flex items-center justify-center overflow-hidden border-b border-gray-850">
-                        <img src="${record.image}" alt="ID Document" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-start justify-between gap-2">
-                                <h3 class="font-bold text-white text-base truncate">${record.name}</h3>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-900/50 whitespace-nowrap">${record.type}</span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1">No: <span class="text-gray-200 font-mono">${record.number}</span></p>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-gray-900 flex justify-between items-center">
-                            <span class="text-[10px] text-gray-500">Added: ${record.dateAdded}</span>
-                            <button onclick="deleteRecord(${record.id})" class="text-xs text-red-400 hover:text-red-300 font-medium transition">Remove</button>
-                        </div>
-                    </div>
-                `;
-                recordsContainer.appendChild(card);
+            // Sort alphabetically by primary name
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Bucket profiles by their starting character letter
+            const groups = {};
+            filtered.forEach(p => {
+                const firstLetter = p.name.charAt(0).toUpperCase();
+                if (!groups[firstLetter]) groups[firstLetter] = [];
+                groups[firstLetter].push(p);
+            });
+
+            // Draw A-Z Blocks
+            Object.keys(groups).sort().forEach(letter => {
+                const block = document.createElement('div');
+                block.className = "space-y-1.5";
+                block.innerHTML = `<div class="text-xs font-bold font-mono text-cyan-500/70 border-b border-gray-900 px-1 pb-0.5">${letter}</div>`;
+                
+                const listWrapper = document.createElement('div');
+                listWrapper.className = "space-y-1";
+
+                groups[letter].forEach(profile => {
+                    const row = document.createElement('button');
+                    row.type = "button";
+                    const isSelected = profile.id === selectedProfileId;
+                    row.className = `w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition flex items-center justify-between ${isSelected ? 'bg-cyan-500 text-gray-950 font-bold' : 'bg-gray-900/60 hover:bg-gray-900 text-gray-300'}`;
+                    row.innerHTML = `
+                        <span class="truncate pr-2">${profile.name}</span>
+                        <span class="text-[10px] opacity-60 font-mono font-normal whitespace-nowrap">${profile.age} yrs</span>
+                    `;
+                    row.onclick = () => selectProfile(profile.id);
+                    listWrapper.appendChild(row);
+                });
+                
+                block.appendChild(listWrapper);
+                azListContainer.appendChild(block);
             });
         }
 
-        // Delete function
-        window.deleteRecord = function(id) {
-            if(confirm("Are you sure you want to remove this record?")) {
-                db = db.filter(item => item.id !== id);
-                localStorage.setItem('xdata_vault', JSON.stringify(db));
-                renderRecords(searchBar.value);
+        // View Single Detailed Record inside Inspector View
+        function selectProfile(id) {
+            selectedProfileId = id;
+            const profile = profiles.find(p => p.id === id);
+            
+            // Re-render directory list to highlight current selection background colors
+            renderIndex(searchBar.value);
+
+            if (!profile) {
+                inspectorPanel.innerHTML = `<div class="text-center text-gray-500"><p>📂 Profile no longer exists</p></div>`;
+                inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col justify-center items-center p-6";
+                return;
+            }
+
+            inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col p-6 overflow-y-auto";
+            inspectorPanel.innerHTML = `
+                <div class="flex justify-between items-start border-b border-gray-900 pb-4 mb-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-white tracking-wide">${profile.name}</h2>
+                        <p class="text-xs text-gray-400 mt-0.5">Database ID Reference: <span class="font-mono text-cyan-400">${profile.id}</span></p>
+                    </div>
+                    <button onclick="deleteProfile(${profile.id})" class="text-xs bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900 hover:text-white px-2.5 py-1 rounded transition">Delete Profile</button>
+                </div>
+
+                <!-- Relational Genealogy Grid Info -->
+                <div class="space-y-4 flex-1">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Family Relations</h3>
+                        <div class="grid grid-cols-2 gap-3 bg-gray-900/40 p-4 rounded-xl border border-gray-900">
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Father's Name</span>
+                                <span class="text-sm font-medium text-gray-200">${profile.dad}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Mother's Name</span>
+                                <span class="text-sm font-medium text-gray-200">${profile.mom}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Grandfather</span>
+                                <span class="text-sm font-medium text-gray-200">${profile.grandpa}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Grandmother</span>
+                                <span class="text-sm font-medium text-gray-200">${profile.grandma}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Metrics Info -->
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Personal Data Summary</h3>
+                        <div class="grid grid-cols-3 gap-3 bg-gray-900/40 p-4 rounded-xl border border-gray-900 text-sm">
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Current Age</span>
+                                <span class="text-gray-200">${profile.age}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Location Base</span>
+                                <span class="text-gray-200 truncate block">${profile.location}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] uppercase text-gray-500">Phone Number</span>
+                                <span class="text-gray-200 font-mono">${profile.phone}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attached Documents Frame -->
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-500/70 mb-2 font-mono">Stored Verification Documents</h3>
+                        <div class="border border-gray-900 rounded-xl overflow-hidden bg-gray-900/20 aspect-video flex items-center justify-center">
+                            ${profile.image ? 
+                                `<img src="${profile.image}" alt="ID Document Viewer" class="w-full h-full object-contain hover:scale-105 transition duration-300">` : 
+                                `<p class="text-xs text-gray-650 italic">No image attachment stored for this profile.</p>`
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-gray-900 text-[10px] text-gray-500 flex justify-between">
+                    <span>Record Established: ${profile.timestamp}</span>
+                </div>
+            `;
+        }
+
+        // Wipe Record
+        window.deleteProfile = function(id) {
+            if(confirm("Permanently erase this person's record and linked files from system?")) {
+                profiles = profiles.filter(p => p.id !== id);
+                localStorage.setItem('xdata_profiles', JSON.stringify(profiles));
+                selectedProfileId = null;
+                
+                // Clear inspector panel display state back to raw base
+                inspectorPanel.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg">📂 No Profile Selected</p>
+                        <p class="text-xs text-gray-600 mt-1">Select a name from the A-Z directory index to inspect details.</p>
+                    </div>
+                `;
+                inspectorPanel.className = "lg:col-span-5 bg-gray-950 rounded-xl border border-gray-850 h-full flex flex-col justify-center items-center p-6 text-gray-500";
+                
+                renderIndex(searchBar.value);
             }
         }
 
-        // Real-time search handler
+        // Live filtration sorting query hook
         searchBar.addEventListener('input', (e) => {
-            renderRecords(e.target.value);
+            renderIndex(e.target.value);
         });
 
-        // Initialize view on load
-        renderRecords();
+        // Initialize setup directory arrays
+        renderIndex();
     </script>
 </body>
 </html>
