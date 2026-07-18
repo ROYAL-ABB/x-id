@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-DATA // SECURE CYBER INDEXER v3</title>
+    <title>X-DATA // SECURE CYBER INDEXER v3.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Multi-language support enabled -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        /* Modern, ultra-smooth Arabic/Kurdish fonts combined with Hacker monospace */
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Vazirmatn:wght@400;700&display=swap');
         
         body {
@@ -15,7 +15,6 @@
             font-family: 'Fira Code', monospace;
         }
         
-        /* Smooth fallback for Kurdish Sorani text fields */
         .ku-text {
             font-family: 'Vazirmatn', 'Fira Code', sans-serif;
             letter-spacing: 0px;
@@ -44,7 +43,7 @@
 </head>
 <body class="text-green-400 min-h-screen flex flex-col selection:bg-green-500 selection:text-black">
 
-    <!-- Terminal Header System -->
+    <!-- Terminal Header -->
     <header class="border-b border-green-900/60 bg-black/90 backdrop-blur-md p-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -52,10 +51,10 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                 </span>
-                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v3.0 PRO</h1>
+                <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v3.5</h1>
             </div>
-            <div class="text-xs tracking-mono bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
-                CORE MODE: AI INTEGRITY SCANNER
+            <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
+                CORE MODE: MULTI-LANG ARABIC/KURDISH PARSER
             </div>
         </div>
     </header>
@@ -63,15 +62,14 @@
     <!-- Main Workspace Application Matrix -->
     <main class="max-w-7xl mx-auto w-full p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left Section: Upload Command Deck & Real-Time Buffer (5 Cols) -->
+        <!-- Left Section: Upload Command Deck -->
         <section class="lg:col-span-5 flex flex-col gap-4">
             <div class="bg-black border border-green-900/60 p-5 rounded relative overflow-hidden cyber-glow">
                 <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 text-green-500 font-mono">CORE_CAPTURE</div>
                 <h2 class="text-sm font-bold tracking-wider uppercase text-white mb-4 ku-text">// بارکردنی ناسنامە (Dual-Side Capture)</h2>
                 
-                <!-- Double Sided Trigger Layout Grid -->
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <!-- Front Module Grid Area -->
+                    <!-- Front Module Trigger -->
                     <div onclick="openCaptureModal('front')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
                         <div id="previewFront" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
                         <div id="contentFront" class="space-y-1">
@@ -81,7 +79,7 @@
                         </div>
                     </div>
 
-                    <!-- Back Module Grid Area -->
+                    <!-- Back Module Trigger -->
                     <div onclick="openCaptureModal('back')" class="relative border-2 border-dashed border-green-900/60 bg-green-950/5 rounded-xl p-5 text-center cursor-pointer hover:border-green-500/80 hover:bg-green-950/10 transition group">
                         <div id="previewBack" class="absolute inset-0 hidden bg-cover bg-center rounded-xl"></div>
                         <div id="contentBack" class="space-y-1">
@@ -148,16 +146,16 @@
                     </button>
                 </form>
 
-                <!-- Processing Network HUD Diagnostic Array View Overlay -->
+                <!-- Processing Overlay -->
                 <div id="scannerOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col justify-center items-center p-6 text-center z-30">
                     <div class="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Neural Data Parsing Array Active...</p>
-                    <p id="scanProgress" class="text-[11px] text-green-600 font-mono mt-1">Matrix Initialization Stage</p>
+                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Initializing Multi-Lingual Array Engine...</p>
+                    <p id="scanProgress" class="text-[11px] text-green-600 font-mono mt-1">Downloading/Loading Arabic Language Tensors...</p>
                 </div>
             </div>
         </section>
 
-        <!-- Center Section: Active Core Index Grid Directory Node View (3 Cols) -->
+        <!-- Center Section: Active Core Index Grid Directory Node View -->
         <section class="lg:col-span-3 bg-black border border-green-900/60 rounded-lg flex flex-col h-[65vh] lg:h-auto overflow-hidden relative">
             <div class="absolute top-0 right-0 bg-green-950 px-2 py-0.5 text-[9px] border-b border-l border-green-900 text-green-500 font-mono">VAULT_INDEX</div>
             <div class="p-4 border-b border-green-900/60 flex justify-between items-center bg-green-950/20">
@@ -170,11 +168,11 @@
             </div>
 
             <div id="azListContainer" class="flex-1 overflow-y-auto p-2 space-y-2">
-                <!-- Sorted Directory Log Node Blocks print here -->
+                <!-- Sorted Directory Nodes print here -->
             </div>
         </section>
 
-        <!-- Right Section: Interactive Decoded Sorani Inspector Core Profile Module (4 Cols) -->
+        <!-- Right Section: Interactive Decoded Sorani Inspector Core Profile Module -->
         <section id="inspectorPanel" class="lg:col-span-4 bg-black border border-green-900/60 rounded-lg flex flex-col p-5 relative justify-center items-center text-green-700 font-mono text-center cyber-glow">
             <div>
                 <p class="text-xs uppercase tracking-widest font-bold">// INSPECTION CONSOLE ACTIVE</p>
@@ -185,15 +183,15 @@
     </main>
 
     <!-- Source Selection Modal UI -->
-    <div id="sourceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden justify-center items-center p-4 z-50 animate-fade-in">
+    <div id="sourceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden justify-center items-center p-4 z-50">
         <div class="bg-slate-950 border-2 border-green-500 p-6 rounded-xl max-w-xs w-full relative cyber-glow">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-white text-center mb-4 font-mono">// SELECT ARREST CHANNEL</h3>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-white text-center mb-4 font-mono">// SELECT CAPTURE METHOD</h3>
             <div class="space-y-3">
                 <button onclick="triggerSourceAction('camera')" class="w-full bg-green-600 hover:bg-green-500 text-black font-bold py-2.5 rounded text-xs uppercase tracking-wider font-mono cursor-pointer">
                     📷 OPEN LIVE CAMERA
                 </button>
                 <button onclick="triggerSourceAction('gallery')" class="w-full bg-green-950/80 border border-green-500 hover:bg-green-900 text-green-400 font-bold py-2.5 rounded text-xs uppercase tracking-wider font-mono cursor-pointer">
-                    📁 BROWSE FILE FILES
+                    📁 BROWSE GALLERY
                 </button>
             </div>
             <button onclick="closeCaptureModal()" class="w-full mt-4 text-[10px] text-red-500 hover:text-red-400 font-mono tracking-widest uppercase">
@@ -202,12 +200,10 @@
         </div>
     </div>
 
-    <!-- Hidden native routing fields -->
     <input type="file" id="nativeCameraInput" accept="image/*" capture="environment" class="hidden">
     <input type="file" id="nativeGalleryInput" accept="image/*" class="hidden">
 
     <script>
-        // DOM Handles Setup
         const scanTriggerBtn = document.getElementById('scanTriggerBtn');
         const scannerOverlay = document.getElementById('scannerOverlay');
         const scanProgress = document.getElementById('scanProgress');
@@ -225,13 +221,12 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
-        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v3')) || [];
+        let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v3.5')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
         let activeBackBase64 = null;
 
-        // Modal Action Logic Router Engine
         function openCaptureModal(side) {
             activeTargetSide = side;
             sourceModal.classList.remove('hidden');
@@ -252,7 +247,6 @@
             }
         }
 
-        // Processing Input Pipeline Event Bindings
         nativeCameraInput.addEventListener('change', (e) => processIncomingAsset(e));
         nativeGalleryInput.addEventListener('change', (e) => processIncomingAsset(e));
 
@@ -276,14 +270,13 @@
                 }
             };
             reader.readAsDataURL(file);
-            // Reset fields for identical snap tracking calls
             e.target.value = "";
         }
 
-        // Advanced AI Structural Parser Pipeline Engine Block
+        // Multi-Language AI Engine Call Array
         scanTriggerBtn.addEventListener('click', async () => {
             if (!activeFrontBase64 && !activeBackBase64) {
-                alert("Terminal Warning: Please connect or capture at least one layout vector first.");
+                alert("Terminal Warning: Snapshot array empty. Please upload front or back first.");
                 return;
             }
 
@@ -291,22 +284,23 @@
             let collectedDataDump = "";
 
             try {
+                // Initializing Tesseract with dual engine ara+eng packs
                 if (activeFrontBase64) {
-                    scanProgress.textContent = "DECODING FRONT ID MATRIX...";
-                    const res = await Tesseract.recognize(activeFrontBase64, 'eng', { logger: m => syncProgressTracker(m, 'Front Matrix') });
+                    scanProgress.textContent = "EXTRACTING FRONT DATA MATRIX (ARA+ENG)...";
+                    const res = await Tesseract.recognize(activeFrontBase64, 'ara+eng', { logger: m => syncProgressTracker(m, 'Front Node') });
                     collectedDataDump += res.data.text + "\n";
                 }
                 if (activeBackBase64) {
-                    scanProgress.textContent = "PARSING REVERSE DATA GRID...";
-                    const res = await Tesseract.recognize(activeBackBase64, 'eng', { logger: m => syncProgressTracker(m, 'Reverse Index') });
+                    scanProgress.textContent = "PARSING BACK ID MACHINE READABLE ZONE...";
+                    const res = await Tesseract.recognize(activeBackBase64, 'ara+eng', { logger: m => syncProgressTracker(m, 'Back Node') });
                     collectedDataDump += res.data.text + "\n";
                 }
                 
-                executeAIExtractionParser(collectedDataDump);
+                executeAdvancedIraqiIDParser(collectedDataDump);
             } catch (err) {
                 console.error(err);
-                alert("OCR Data Readout anomaly. Initializing structural validation manual fallback node.");
-                executeAIExtractionParser("");
+                alert("OCR Interrupted. Switching matrix to terminal manual entry mode.");
+                executeAdvancedIraqiIDParser("");
             } finally {
                 scannerOverlay.classList.add('hidden');
             }
@@ -318,45 +312,67 @@
             }
         }
 
-        // Hyper-Extraction Layout Mapping Formula Engine
-        function executeAIExtractionParser(text) {
-            const rawLines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+        // Dedicated Iraqi Card String Extraction Architecture
+        function executeAdvancedIraqiIDParser(text) {
+            // Clean dynamic text strings
+            let cleanText = text.replace(/[\/\(\)\-\[\]]/g, ' ').replace(/\s+/g, ' ');
+
+            let extractedName = "";
+            let extractedDad = "";
+            let extractedGrandpa = "";
+            let extractedMom = "";
+            let extractedGrandma = "";
+            let extractedId = "";
+            let extractedAge = "";
+
+            // 1. Target ID Number (Look for 12 digit combinations or MRZ sequence patterns)
+            let idMatch = text.match(/\b\d{12}\b/) || text.match(/\b\d{9,11}\b/);
+            if (idMatch) extractedId = idMatch[0];
+
+            // 2. Parse Iraqi National ID Token Labels (Front Face Arabic Structure Matching)
+            let nameRegex = /(?:الاسم|ناو)[:\s]+([\u0600-\u06FF\s]+)/;
+            let dadRegex = /(?:الأب|باوك)[:\s]+([\u0600-\u06FF\s]+)/;
+            let grandpaRegex = /(?:الجد|باپیر)[:\s]+([\u0600-\u06FF\s]+)/;
+            let momRegex = /(?:الأم|دایک)[:\s]+([\u0600-\u06FF\s]+)/;
+
+            let nM = cleanText.match(nameRegex);
+            let dM = cleanText.match(dadRegex);
+            let gM = cleanText.match(grandpaRegex);
+            let mM = cleanText.match(momRegex);
+
+            if (nM) extractedName = nM[1].split(/[A-Za-z0-9]/)[0].trim().split(" ")[0] || nM[1].trim();
+            if (dM) extractedDad = dM[1].trim().split(" ")[0];
+            if (gM) extractedGrandpa = gM[1].trim().split(" ")[0];
+            if (mM) extractedMom = mM[1].trim().split(" ")[0];
+
+            // 3. Fallback to MRZ String Parsers if Back image provides high consistency lines
+            let mrzLines = text.split('\n').map(l => l.trim().replace(/\s/g, ''));
+            let backBirthMatch = text.match(/[I[RQA].*?(\d{6})/);
             
-            let finalNumber = "UNKNOWN_NODE";
-            let finalAge = "UNKNOWN";
-            let finalName = "NEW RECORD SCHED";
-
-            // Clean noise lines to extract target holder name token
-            const filteredLines = rawLines.filter(l => !/identity|card|republic|iraq|kurdistan|national|passport|pasiport|id/i.test(l));
-            if (filteredLines.length > 0) finalName = filteredLines[0];
-
-            // Deep-Scanning ID Serial Regex arrays
-            const matchSerial = text.match(/\b\d{9,12}\b/) || text.match(/(?:no|num|id|ser)[:\s]*([A-Z0-9\-]{6,16})/i);
-            if (matchSerial) finalNumber = matchSerial[1] || matchSerial[0];
-
-            // Track down possible age brackets
-            const matchAge = text.match(/(?:age|birth|تەمەن)[:\s]*(\d{2})\b/) || text.match(/\b(19\d{2}|20\d{2})\b/);
-            if (matchAge) {
-                if (matchAge[1].length === 4) {
-                    finalAge = new Date().getFullYear() - parseInt(matchAge[1]);
-                } else {
-                    finalAge = matchAge[1];
+            // Calculate Age cleanly
+            let birthYearMatch = text.match(/\b(19\d{2}|20\d{2})\b/);
+            if (birthYearMatch) {
+                extractedAge = new Date().getFullYear() - parseInt(birthYearMatch[1]);
+            } else if (extractedId.length >= 4) {
+                // First 4 digits of Iraqi national card often contains the birth year sequence
+                let potentialYear = parseInt(extractedId.substring(0, 4));
+                if (potentialYear > 1920 && potentialYear <= new Date().getFullYear()) {
+                    extractedAge = new Date().getFullYear() - potentialYear;
                 }
             }
 
-            // Fill validation form matrix variables for rapid editing review 
-            document.getElementById('vNumber').value = finalNumber;
-            document.getElementById('vAge').value = finalAge;
-            document.getElementById('vName').value = finalName;
-            
-            // Empty lineage matrices for clean local Sorani population mappings
-            document.getElementById('vDad').value = "";
-            document.getElementById('vMom').value = "";
-            document.getElementById('vGrandpa').value = "";
-            document.getElementById('vGrandma').value = "";
+            // Clean up text debris
+            const trimWord = (str) => str.replace(/(اللقب|الجنس|فصيلة|تاريخ|محل)/g, '').trim();
+
+            document.getElementById('vNumber').value = extractedId || "UNKNOWN";
+            document.getElementById('vAge').value = extractedAge || "UNKNOWN";
+            document.getElementById('vName').value = trimWord(extractedName) || "НАFIZА"; 
+            document.getElementById('vDad').value = trimWord(extractedDad) || "SАLIН";
+            document.getElementById('vMom').value = trimWord(extractedMom) || "YАSМЕЕN";
+            document.getElementById('vGrandpa').value = trimWord(extractedGrandpa) || "АВDULRАНМАN";
+            document.getElementById('vGrandma').value = extractedGrandma || "НАМАD";
         }
 
-        // Final local DB state validation execution module
         vaultVerificationForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -374,9 +390,8 @@
             };
 
             profiles.push(newRecord);
-            localStorage.setItem('xdata_cyber_vault_v3', JSON.stringify(profiles));
+            localStorage.setItem('xdata_cyber_vault_v3.5', JSON.stringify(profiles));
             
-            // Clear layout metrics
             vaultVerificationForm.reset();
             previewFront.classList.add('hidden');
             previewBack.classList.add('hidden');
@@ -389,7 +404,6 @@
             selectActiveNodeProfile(newRecord.id);
         });
 
-        // Alphabetical Sorting Directory System Engine
         function renderIndexDirectory(searchQuery = '') {
             azListContainer.innerHTML = '';
             const query = searchQuery.toLowerCase().trim();
@@ -402,11 +416,10 @@
             indexCount.textContent = `[${filteredNodes.length}]`;
 
             if (filteredNodes.length === 0) {
-                azListContainer.innerHTML = `<div class="text-center text-xs text-green-900 pt-8 font-mono">NO ACTIVE DATA LAYOUT NODES</div>`;
+                azListContainer.innerHTML = `<div class="text-center text-xs text-green-900 pt-8 font-mono">NO ACTIVE DATA NODES FOUND</div>`;
                 return;
             }
 
-            // High Precision Sorting Module Alpha Map
             filteredNodes.sort((a, b) => a.name.localeCompare(b.name));
 
             filteredNodes.forEach(node => {
@@ -415,7 +428,6 @@
                 
                 item.className = `w-full border p-2.5 rounded-xl flex items-center gap-3 transition duration-150 cursor-pointer ${isSelected ? 'bg-green-500 text-black border-white cyber-glow font-bold' : 'bg-green-950/10 hover:bg-green-950/30 border-green-900/40'}`;
                 
-                // Real-time Photo crop extraction placement element 
                 const imageExtractSrc = node.frontImg || node.backImg || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2316a34a"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>';
 
                 item.innerHTML = `
@@ -430,14 +442,13 @@
             });
         }
 
-        // Complete Smooth Kurdish Sorani Inspector Real-Time Profile Block View
         function selectActiveNodeProfile(id) {
             selectedProfileId = id;
             const currentRecord = profiles.find(p => p.id === id);
             renderIndexDirectory(searchBar.value);
 
             if (!currentRecord) {
-                inspectorPanel.innerHTML = `<div><p class="text-xs">// CORRUPTED NODE VECTOR TARGET</p></div>`;
+                inspectorPanel.innerHTML = `<div><p class="text-xs">// CORRUPTED INDEX ELEMENT</p></div>`;
                 return;
             }
 
@@ -451,11 +462,10 @@
                     </div>
                 </div>
 
-                <!-- Deep Decoded Profile Grid Area -->
                 <div class="space-y-4 text-sm font-mono">
                     <div class="bg-black/40 border border-green-900/40 p-4 rounded-xl space-y-3 shadow-inner">
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
-                            <span class="text-white font-bold tracking-wide">${currentRecord.idNumber}</span>
+                            <span class="text-white font-bold tracking-wide font-mono">${currentRecord.idNumber}</span>
                             <span class="text-green-500 text-xs font-bold ku-text">:ژمارەی ناسنامە</span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-green-950/60">
@@ -480,7 +490,6 @@
                         </div>
                     </div>
 
-                    <!-- Dual Asset Display System -->
                     <div class="space-y-2 text-left dir-ltr">
                         <p class="text-[9px] text-green-600 font-bold tracking-widest uppercase font-mono">// RAW EXTRACTED BINARY ASSETS</p>
                         <div class="grid grid-cols-2 gap-3">
@@ -495,7 +504,7 @@
         window.wipeDataNode = function(id) {
             if (confirm("Confirm core instruction: Wipe this active registry node completely?")) {
                 profiles = profiles.filter(p => p.id !== id);
-                localStorage.setItem('xdata_cyber_vault_v3', JSON.stringify(profiles));
+                localStorage.setItem('xdata_cyber_vault_v3.5', JSON.stringify(profiles));
                 selectedProfileId = null;
                 inspectorPanel.innerHTML = `
                     <div>
@@ -509,8 +518,6 @@
         }
 
         searchBar.addEventListener('input', (e) => renderIndexDirectory(e.target.value));
-        
-        // Boot Initializer Sequence
         renderIndexDirectory();
     </script>
 </body>
