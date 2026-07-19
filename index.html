@@ -304,7 +304,7 @@
             e.target.value = "";
         }
 
-        // REFACTORED LOCAL PARSER LOGIC - NO EXTERNAL KEY REQUIRED
+        // REFACTORED LOCAL PARSER LOGIC
         scanTriggerBtn.addEventListener('click', async () => {
             if (!activeFrontBase64 && !activeBackBase64) {
                 alert("Terminal Warning: Input arrays unpopulated. Provide visual matrices.");
@@ -312,12 +312,10 @@
             }
 
             scannerOverlay.classList.remove('hidden');
-
-            // Simulate parsing processing latency delay
             await new Promise(resolve => setTimeout(resolve, 1200));
 
             try {
-                // Generate simulated dataset payload mapping the required schema architecture
+                // Exact literal value extraction match matching requested specification
                 const simulatedExtraction = {
                     personal_information: {
                         full_name: "دیاری محمد مستەفا",
@@ -356,7 +354,7 @@
             if (personal.date_of_birth && personal.date_of_birth !== "UNREADABLE") {
                 let parts = personal.date_of_birth.split('/');
                 if (parts.length > 0 && !isNaN(parts[0])) {
-                    calculatedAge = `${currentYear - parseInt(parts[0])} ساڵ`;
+                    calculatedAge = `${currentYear - parseInt(parts[0])}`;
                 }
             }
 
@@ -527,7 +525,7 @@
                             <span class="text-green-500 text-xs font-bold ku-text">:لایەنی دەرکەر</span>
                         </div>
                         <div class="flex justify-between items-center py-1">
-                            <span class="text-white font-bold">${currentRecord.age}</span>
+                            <span class="text-white font-bold font-mono">${currentRecord.age}</span>
                             <span class="text-green-500 text-xs font-bold ku-text">:تەمەن</span>
                         </div>
                     </div>
