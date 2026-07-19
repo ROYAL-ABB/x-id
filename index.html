@@ -51,8 +51,11 @@
                 </span>
                 <h1 class="text-xl font-black tracking-widest text-white">X-<span class="text-green-500">DATA</span> // v5.3</h1>
             </div>
-            <div class="text-xs bg-green-950/40 border border-green-900/80 px-3 py-1 text-green-400 rounded font-bold">
-                CORE MATRIX: TARGET DATA INDEXER (VISION CORE INTERFACE)
+            
+            <!-- Dynamic API Key Entry Component (Required for pure frontend operations) -->
+            <div class="flex items-center gap-2">
+                <label class="text-[10px] uppercase text-green-600 font-bold font-mono">GEMINI_KEY:</label>
+                <input type="password" id="geminiApiKeyField" class="bg-slate-950 text-green-400 px-3 py-1 rounded border border-green-900/60 font-mono text-xs focus:outline-none focus:border-green-500 w-48 transition" placeholder="Paste API Key Here...">
             </div>
         </div>
     </header>
@@ -87,7 +90,7 @@
                 </div>
 
                 <button id="scanTriggerBtn" class="w-full bg-green-500 hover:bg-green-400 text-black font-black py-3 rounded-lg text-xs tracking-widest transition uppercase cursor-pointer shadow-lg shadow-green-500/10">
-                    Execute Resilient Vision Parsing
+                    Execute Pure Frontend Vision Parsing
                 </button>
             </div>
 
@@ -178,8 +181,8 @@
                 <!-- Loading HUD Overlay -->
                 <div id="scannerOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col justify-center items-center p-6 text-center z-30">
                     <div class="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Running Vision AI Indexer Core...</p>
-                    <p class="text-[11px] text-green-600 font-mono mt-1">Parsing bilingual structural matrix layers...</p>
+                    <p class="text-xs font-mono text-green-400 uppercase tracking-widest animate-pulse">Querying Direct Gemini Pipeline Core...</p>
+                    <p class="text-[11px] text-green-600 font-mono mt-1">Decrypting bilingual structural layout matrices...</p>
                 </div>
             </div>
         </section>
@@ -241,6 +244,7 @@
         const indexCount = document.getElementById('indexCount');
         const inspectorPanel = document.getElementById('inspectorPanel');
         const sourceModal = document.getElementById('sourceModal');
+        const geminiApiKeyField = document.getElementById('geminiApiKeyField');
         
         const nativeCameraInput = document.getElementById('nativeCameraInput');
         const nativeGalleryInput = document.getElementById('nativeGalleryInput');
@@ -249,11 +253,21 @@
         const contentFront = document.getElementById('contentFront');
         const contentBack = document.getElementById('contentBack');
 
+        // Automatically load persistent variables from local index array
         let profiles = JSON.parse(localStorage.getItem('xdata_cyber_vault_v5_3')) || [];
         let selectedProfileId = null;
         let activeTargetSide = null;
         let activeFrontBase64 = null;
         let activeBackBase64 = null;
+
+        // Load cached api key if present
+        if(localStorage.getItem('xdata_gemini_key')) {
+            geminiApiKeyField.value = localStorage.getItem('xdata_gemini_key');
+        }
+
+        geminiApiKeyField.addEventListener('input', (e) => {
+            localStorage.setItem('xdata_gemini_key', e.target.value.trim());
+        });
 
         function openCaptureModal(side) {
             activeTargetSide = side;
@@ -302,6 +316,12 @@
         }
 
         scanTriggerBtn.addEventListener('click', async () => {
+            const apiKey = geminiApiKeyField.value.trim();
+            if (!apiKey) {
+                alert("Core Matrix Interruption: Missing target Gemini API Key parameters in header window.");
+                return;
+            }
+
             if (!activeFrontBase64 && !activeBackBase64) {
                 alert("Terminal Warning: Input arrays unpopulated. Provide visual matrices.");
                 return;
@@ -310,37 +330,101 @@
             scannerOverlay.classList.remove('hidden');
 
             try {
-                // Post operational frame payloads to the backend API endpoint loop
-                const response = await fetch('/api/v1/extract-id', {
+                const contentsPayload = [];
+
+                // Format base64 entities directly for inline image data parameters
+                if (activeFrontBase64) contentsPayload.push(extractBase64Object(activeFrontBase64));
+                if (activeBackBase64) contentsPayload.push(extractBase64Object(activeBackBase64));
+
+                // Add instruction configuration prompt matrix
+                contentsPayload.push({
+                    text: `You are an expert document scanner engine specialized in legal identity cards, targeting the Iraqi National Card.
+                    Analyze the attached image matrices (front and/or back). The card mixes Arabic, Kurdish, and English text strings alongside numerical sequences.
+                    
+                    CRITICAL INSTRUCTIONS:
+                    1. Extract all names and numbers exactly as displayed.
+                    2. Disregard background security grids and holographic layers.
+                    3. If any data field is omitted or blurry, return the value "UNREADABLE".
+                    4. Normalize dates into: YYYY/MM/DD.`
+                });
+
+                // Target Endpoint Query System Configuration Map
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        frontImage: activeFrontBase64,
-                        backImage: activeBackBase64
+                        contents: [{ parts: contentsPayload }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    personal_information: {
+                                        type: "OBJECT",
+                                        properties: {
+                                            full_name: { type: "STRING" },
+                                            mothers_name: { type: "STRING" },
+                                            gender: { type: "STRING" },
+                                            blood_type: { type: "STRING" },
+                                            date_of_birth: { type: "STRING" },
+                                            place_birth: { type: "STRING" }
+                                        },
+                                        required: ["full_name", "mothers_name", "gender", "blood_type", "date_of_birth", "place_birth"]
+                                    },
+                                    document_details: {
+                                        type: "OBJECT",
+                                        properties: {
+                                            national_id_number: { type: "STRING" },
+                                            document_serial_number: { type: "STRING" },
+                                            family_number: { type: "STRING" },
+                                            date_of_issue: { type: "STRING" },
+                                            date_of_expiry: { type: "STRING" },
+                                            issuing_authority: { type: "STRING" }
+                                        },
+                                        required: ["national_id_number", "document_serial_number", "family_number", "date_of_issue", "date_of_expiry", "issuing_authority"]
+                                    }
+                                },
+                                required: ["personal_information", "document_details"]
+                            },
+                            temperature: 0.1
+                        }
                     })
                 });
 
-                const result = await response.json();
-
-                if (!result.success) {
-                    throw new Error(result.error || "Vision array execution fault.");
+                const rawJson = await response.json();
+                
+                if (rawJson.error) {
+                    throw new Error(rawJson.error.message || "Pipeline error detected.");
                 }
 
-                populateFormFields(result.data);
+                const responseText = rawJson.candidates[0].content.parts[0].text;
+                const extractedJsonData = JSON.parse(responseText);
+                
+                populateFormFields(extractedJsonData);
 
             } catch (err) {
                 console.error(err);
-                alert(`Processing disruption: ${err.message}`);
+                alert(`Extraction Array Failure: ${err.message}`);
             } finally {
                 scannerOverlay.classList.add('hidden');
             }
         });
 
+        function extractBase64Object(dataUri) {
+            const matches = dataUri.match(/^data:(.+);base64,(.+)$/);
+            if (!matches) throw new Error("Structural image payload error.");
+            return {
+                inlineData: {
+                    mimeType: matches[1],
+                    data: matches[2]
+                }
+            };
+        }
+
         function populateFormFields(data) {
             const personal = data.personal_information || {};
             const doc = data.document_details || {};
 
-            // Calculate age dynamically using baseline target context year (2026)
             let currentYear = 2026;
             let calculatedAge = "";
             if (personal.date_of_birth && personal.date_of_birth !== "UNREADABLE") {
