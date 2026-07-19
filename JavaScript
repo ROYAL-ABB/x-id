@@ -1,0 +1,132 @@
+import express from 'express';
+import { GoogleGenAI, Type } from '@google/genai';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Initialize the official Google Gen AI SDK
+const ai = new GoogleGenAI();
+
+// Increase JSON payload capacity to comfortably transfer multiple base64 image strings
+app.use(express.json({ limit: '20mb' }));
+
+// Serve the production front-end interface dashboard
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Strict JSON Schema Definition to enforce the output format from the Vision AI
+const nationalCardSchema = {
+    type: Type.OBJECT,
+    properties: {
+        personal_information: {
+            type: Type.OBJECT,
+            properties: {
+                full_name: { type: Type.STRING, description: "The full name of the individual extracted exactly as written." },
+                mothers_name: { type: Type.STRING, description: "The full name of the mother." },
+                gender: { type: Type.STRING, description: "Gender or sex." },
+                blood_type: { type: Type.STRING, description: "Blood type matrix group (e.g., O+, A-, etc.)." },
+                date_of_birth: { type: Type.STRING, description: "Date of birth strictly formatted as YYYY/MM/DD." },
+                place_birth: { type: Type.STRING, description: "The registered place or city of birth." }
+            },
+            required: ["full_name", "mothers_name", "gender", "blood_type", "date_of_birth", "place_birth"]
+        },
+        document_details: {
+            type: Type.OBJECT,
+            properties: {
+                national_id_number: { type: Type.STRING, description: "The unique 12-digit national identifier number." },
+                document_serial_number: { type: Type.STRING, description: "The document alphanumeric serial number typically found on the edge or back." },
+                family_number: { type: Type.STRING, description: "The specific family record sequence number." },
+                date_of_issue: { type: Type.STRING, description: "Date the document was issued formatted as YYYY/MM/DD." },
+                date_of_expiry: { type: Type.STRING, description: "Date of document expiration formatted as YYYY/MM/DD." },
+                issuing_authority: { type: Type.STRING, description: "The official directorate or authority that issued the card." }
+            },
+            required: ["national_id_number", "document_serial_number", "family_number", "date_of_issue", "date_of_expiry", "issuing_authority"]
+        }
+    },
+    required: ["personal_information", "document_details"]
+};
+
+/**
+ * Helper to transform a standard client base64 data URI string into the format Gemini requires
+ */
+function base64ToGenerativePart(base64DataUri) {
+    const matches = base64DataUri.match(/^data:(.+);base64,(.+)$/);
+    if (!matches) {
+        throw new Error("Invalid base64 structural interface input.");
+    }
+    return {
+        inlineData: {
+            mimeType: matches[1],
+            data: matches[2]
+        }
+    };
+}
+
+/**
+ * @route POST /api/v1/extract-id
+ * @desc Process complex layout data via Gemini 1.5 Pro Vision API
+ */
+app.post('/api/v1/extract-id', async (req, res) => {
+    const { frontImage, backImage } = req.body;
+
+    if (!frontImage && !backImage) {
+        return res.status(400).json({ success: false, error: "Input arrays unpopulated. Provide visual matrices." });
+    }
+
+    try {
+        const contentsPayload = [];
+
+        // Attach whatever visual frames the interface has acquired
+        if (frontImage) contentsPayload.push(base64ToGenerativePart(frontImage));
+        if (backImage) contentsPayload.push(base64ToGenerativePart(backImage));
+
+        // Inject the contextual parsing execution payload instructions
+        contentsPayload.push({
+            text: `You are an expert full-scale document scanner engine specialized in legal identity cards, specifically targeting middle-eastern identity schemas such as the Iraqi National Card.
+            
+            Analyze the attached image matrices (which may contain the front and/or back sides of the card). The card contains text across multiple script directions, mixing Arabic, Kurdish, and English text strings alongside numerical identifiers.
+            
+            CRITICAL INSTRUCTIONS:
+            1. Extract all personal identities and document values cleanly. Look across both side perspectives provided to capture all data fields.
+            2. Split text strings appropriately. For example, parse out the father's name and grandfather's name cleanly from the main text layers.
+            3. Disregard all background geometric security patterns and optical watermarks.
+            4. If fields appear blurry, completely unreadable, or missing entirely (e.g. back side was not provided), set the field strictly to "UNREADABLE". Do not hallucinate or guess characters.
+            5. Normalize all dates into the requested format: YYYY/MM/DD.
+            
+            Return the data strictly structured to match the requested output configuration blueprint.`
+        });
+
+        // Query the Vision Engine Model
+        const response = await ai.models.generateContent({
+            model: 'gemini-1.5-pro',
+            contents: contentsPayload,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: nationalCardSchema,
+                temperature: 0.1,
+            }
+        });
+
+        const extractedJsonData = JSON.parse(response.text);
+        return res.status(200).json({ success: true, data: extractedJsonData });
+
+    } catch (error) {
+        console.error("VISION PIPELINE EXCEPTION ERROR:", error);
+        return res.status(500).json({ 
+            success: false, 
+            error: "Critical failure running target Vision LLM extraction array.",
+            details: error.message 
+        });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`[ONLINE] X-DATA Core Matrix Server running on http://localhost:${port}`);
+});
